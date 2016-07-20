@@ -8,10 +8,10 @@ Are users claiming they are crossing the globe in seconds and collecting all the
 ```javascript
 import JailMonkey from 'jail-monkey'
 
-// true/false of device JailBroken on iOS/Android
+// bool of device JailBroken on iOS/Android
 JailMonkey.isJailBroken()
 
-// More prevalent on Android, not rooted but mocking location data
+// Phone capable of mocking location - not always rooted though!
 JailMonkey.canMockLocation()
 
 // Check if device violates any of the above
