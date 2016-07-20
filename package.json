@@ -1,6 +1,6 @@
 {
   "name": "jail-monkey",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A React Native module for identifying mock locations on iOS and Android",
   "main": "index.js",
   "scripts": {
@@ -11,12 +11,15 @@
     "url": "git+ssh://git@github.com/GantMan/jail-monkey.git"
   },
   "keywords": [
-    "React",
+    "React-Native",
     "Native",
     "Jail",
     "Break",
+    "Jail-Break"
     "iOS",
-    "Android"
+    "Android",
+    "Mock-Locations",
+    "Detect"
   ],
   "author": "Gant Laborde",
   "license": "MIT",
