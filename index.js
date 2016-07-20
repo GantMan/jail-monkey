@@ -3,10 +3,10 @@ const rn = require('react-native')
 let JailMonkey = null
 
 // Detect location of native modules to support older RN
-if (react.NativeModules) {
+if (react.NativeModules && react.NativeModules.JailMonkey) {
   JailMonkey = react.NativeModules.JailMonkey
 } else {
-  JailMonkey = rn.NativeModules.RNDeviceInfo
+  JailMonkey = rn.NativeModules.JailMonkey
 }
 
 export default JailMonkey

@@ -1,6 +1,6 @@
 {
   "name": "jail-monkey",
-  "version": "0.1.0",
+  "version": "0.0.2",
   "description": "A React Native module for identifying mock locations on iOS and Android",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,7 @@
     "Native",
     "Jail",
     "Break",
-    "Jail-Break"
+    "Jail-Break",
     "iOS",
     "Android",
     "Mock-Locations",

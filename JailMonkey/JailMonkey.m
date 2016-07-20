@@ -47,17 +47,16 @@ RCT_EXPORT_MODULE();
 	}else if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"cydia://package/com.example.package"]]){
 		return YES
 	}
-	
+
 	return NO;
 #endif
 }
 
 - (NSDictionary *)constantsToExport
 {
-	
+
 	return @{
-			 @"isJailBroken": @"yay",
-			 @"gantIsAwesome": @(self.isJailBroken)
+			 @"isJailBroken": @(self.isJailBroken)
 			 };
 }
 
