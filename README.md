@@ -1,17 +1,25 @@
 ![Jail Monkey](./_art/JailMonkey.jpg)
-## Detect Mock Locations in React-Native
+## Can you trust this phone?
 
 # Why?
-Are users claiming they are crossing the globe in seconds and collecting all the Pokeballs?  Some apps need to protect themselves, in order to protect data integrity.
+Are users claiming they are crossing the globe in seconds and collecting all the Pokeballs?  Some apps need to protect themselves, in order to protect data integrity.  JailMonkey allows you to identify if a phone has been jail-broken or rooted for iOS/Android.  It also can help you detect mocked locations.
 
 # How to use
 ```javascript
 import JailMonkey from 'jail-monkey'
 
-// returns boolean if device is JailBroken on iOS
-JailMonkey.isJailBroken
+// true/false of device JailBroken on iOS/Android
+JailMonkey.isJailBroken()
 
+// More prevalent on Android, not rooted but mocking location data
+JailMonkey.canMockLocation()
+
+// Check if device violates any of the above
+JailMonkey.trustFall()
 ```
+![Circle of Trust](./_art/trust.jpg)
+
+### :exclamation: Since Simulators/Emulators are usually rooted, you might want to bypass these checks during development.  Check `__DEV__` before running, to avoid constant false alarms
 
 # How to Install
 

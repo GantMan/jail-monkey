@@ -29,9 +29,6 @@ RCT_EXPORT_MODULE();
 }
 
 - (BOOL)isJailBroken{
-#if TARGET_IPHONE_SIMULATOR
-	return NO;
-#else
 	if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Applications/Cydia.app"]){
 		return YES;
 	}else if([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/MobileSubstrate.dylib"]){
@@ -49,14 +46,14 @@ RCT_EXPORT_MODULE();
 	}
 
 	return NO;
-#endif
 }
 
 - (NSDictionary *)constantsToExport
 {
 
 	return @{
-			 @"isJailBroken": @(self.isJailBroken)
+			 @"isJailBroken": @(self.isJailBroken),
+			 @"canMockLocation": @(self.isJailBroken)
 			 };
 }
 
