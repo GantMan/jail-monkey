@@ -2,16 +2,16 @@
 ## Can you ever really trust a phone?
 
 # Why?
-Are users claiming they are crossing the globe in seconds and collecting all the Pokeballs?  Some apps need to protect themselves, in order to protect data integrity.  JailMonkey allows you to identify if a phone has been jail-broken or rooted for iOS/Android.  It also can help you detect mocked locations.
+Are users claiming they are crossing the globe in seconds and collecting all the Pokeballs?  Some apps need to protect themselves in order to protect data integrity.  JailMonkey allows you to identify if a phone has been jail-broken or rooted for iOS/Android.  It also can help you detect mocked locations for phones set in "developer mode".
 
 # Use
 ```javascript
 import JailMonkey from 'jail-monkey'
 
-// bool of device JailBroken on iOS/Android
+// is this device JailBroken on iOS/Android?
 JailMonkey.isJailBroken()
 
-// Phone capable of mocking location - not always rooted though!
+// Can this device mock location - no need to root!
 JailMonkey.canMockLocation()
 
 // Check if device violates any of the above
@@ -19,7 +19,7 @@ JailMonkey.trustFall()
 ```
 ![Circle of Trust](./_art/trust.jpg)
 
-### :exclamation: Since Simulators/Emulators are usually rooted, you might want to bypass these checks during development.  Check `__DEV__` before running, to avoid constant false alarms
+### :exclamation: Since emulators are usually rooted, you might want to bypass these checks during development.  Unless you're keen on constant false alarms :alarm_clock:
 
 # Install
 
@@ -35,6 +35,6 @@ react-native link
 ```
 
 # Additional Info
-This has been made public to help keep it up to date.  As detection measures get better or out-dated; please send updates to this project so it can be the best method of detection.
+This has been made public to help keep it up to date.  As detection measures get better or out-dated, please send updates to this project so it can be the best method of detection.
 
-All methods for the initialization of this project were gathered from the fantastic blog article listed here:  http://blog.geomoby.com/2015/01/25/how-to-avoid-getting-your-location-based-app-spoofed/
+Special thanks to this fantastic blog article:  http://blog.geomoby.com/2015/01/25/how-to-avoid-getting-your-location-based-app-spoofed/
