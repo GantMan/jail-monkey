@@ -1,5 +1,5 @@
 ![Jail Monkey](./_art/JailMonkey.jpg)
-## Can you trust this phone?
+## Can you ever really trust a phone?
 
 # Why?
 Are users claiming they are crossing the globe in seconds and collecting all the Pokeballs?  Some apps need to protect themselves, in order to protect data integrity.  JailMonkey allows you to identify if a phone has been jail-broken or rooted for iOS/Android.  It also can help you detect mocked locations.
