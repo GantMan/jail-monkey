@@ -8,6 +8,7 @@
 
 #import "JailMonkey.h"
 #import "RCTLog.h"
+@import UIKit;
 
 @implementation JailMonkey
 
@@ -42,7 +43,7 @@ RCT_EXPORT_MODULE();
 	}else if(self.canViolateSandbox){
 		return YES;
 	}else if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"cydia://package/com.example.package"]]){
-		return YES
+		return YES;
 	}
 
 	return NO;
