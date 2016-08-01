@@ -40,6 +40,8 @@ RCT_EXPORT_MODULE();
 		return YES;
 	}else if([[NSFileManager defaultManager] fileExistsAtPath:@"/etc/apt"]){
 		return YES;
+	}else if([[NSFileManager defaultManager] fileExistsAtPath:@"/private/var/lib/apt"]){
+		return YES;
 	}else if(self.canViolateSandbox){
 		return YES;
 	}else if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"cydia://package/com.example.package"]]){
