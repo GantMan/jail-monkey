@@ -1,17 +1,19 @@
 package com.gantix.JailMonkey;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.provider.Settings;
 
-import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
-import com.facebook.react.bridge.ReactMethod;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.File;
 
 public class JailMonkeyModule extends ReactContextBaseJavaModule {
 
@@ -30,6 +32,7 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
     final Map<String, Object> constants = new HashMap<>();
     constants.put("isJailBroken", this.isJailBroken());
     constants.put("canMockLocation", this.isMockLocationOn(context));
+    constants.put("isOnExternalStorage", this.isOnExternalStorage(context));
     return constants;
   }
 
@@ -90,5 +93,38 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
       return true;
     }
   }
+
+  /**
+    * Checks if the application is installed on the SD card.
+    * 
+    * @return <code>true</code> if the application is installed on the sd card
+    */
+ private boolean isOnExternalStorage(Context context) {
+   // check for API level 8 and higher
+   if (Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.ECLAIR_MR1) {
+     PackageManager pm = context.getPackageManager();
+     try {
+       PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+       ApplicationInfo ai = pi.applicationInfo;
+       return (ai.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) == ApplicationInfo.FLAG_EXTERNAL_STORAGE;
+     } catch (PackageManager.NameNotFoundException e) {
+       // ignore
+     }
+   }
+
+   // check for API level 7 - check files dir
+   try {
+     String filesDir = context.getFilesDir().getAbsolutePath();
+     if (filesDir.startsWith("/data/")) {
+       return false;
+     } else if (filesDir.contains("/mnt/") || filesDir.contains("/sdcard/")) {
+       return true;
+     }
+   } catch (Throwable e) {
+     // ignore
+   }
+
+   return false;
+ }
 
 }
