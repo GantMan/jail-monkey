@@ -1,0 +1,5 @@
+rootProject.name = 'ExampleProject'
+
+include ':app'
+include ':jail-monkey'
+project(':jail-monkey').projectDir = new File(rootProject.projectDir, '../node_modules/jail-monkey/android')
