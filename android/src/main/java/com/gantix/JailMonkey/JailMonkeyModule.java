@@ -80,7 +80,7 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
    * @return <code>true</code> if the device is rooted, <code>false</code> otherwise.
    */
   private boolean isJailBroken() {
-    return containsTestKeys() && isSuperuserPresent() && canExecuteCommand("/system/xbin/which su");
+    return containsTestKeys() || isSuperuserPresent() || canExecuteCommand("/system/xbin/which su");
   }
 
   // executes a command on the system
