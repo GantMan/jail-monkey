@@ -85,15 +85,19 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
 
   // executes a command on the system
   private static boolean canExecuteCommand(String command) {
-    boolean executedSuccesfully;
+    boolean executeResult;
     try {
-      Runtime.getRuntime().exec(command);
-      executedSuccesfully = true;
+      Process process = Runtime.getRuntime().exec(command);
+      if(process.waitFor() == 0) {
+        executeResult = true;
+      } else {
+        executeResult = false;
+      }
     } catch (Exception e) {
-      executedSuccesfully = false;
+      executeResult = false;
     }
-
-    return executedSuccesfully;
+ 
+    return executeResult;
   }
 
   //returns true if mock location enabled, false if not enabled.
