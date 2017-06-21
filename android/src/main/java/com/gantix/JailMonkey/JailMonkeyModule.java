@@ -10,10 +10,12 @@ import android.provider.Settings;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
+import java.io.BufferedReader;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.InputStreamReader;
 
 public class JailMonkeyModule extends ReactContextBaseJavaModule {
 
@@ -46,20 +48,20 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
 
   private boolean isSuperuserPresent() {
     // Check if /system/app/Superuser.apk is present
-    String[] paths = { 
-      "/system/app/Superuser.apk", 
-      "/sbin/su", 
-      "/system/bin/su", 
-      "/system/xbin/su", 
-      "/data/local/xbin/su", 
-      "/data/local/bin/su", 
-      "/system/sd/xbin/su", 
-      "/system/bin/failsafe/su", 
-      "/data/local/su" 
+    String[] paths = {
+      "/system/app/Superuser.apk",
+      "/sbin/su",
+      "/system/bin/su",
+      "/system/xbin/su",
+      "/data/local/xbin/su",
+      "/data/local/bin/su",
+      "/system/sd/xbin/su",
+      "/system/bin/failsafe/su",
+      "/data/local/su"
     };
 
     for (String path : paths) {
-        if (new File(path).exists()) { 
+        if (new File(path).exists()) {
           return true;
         }
     }
@@ -80,8 +82,40 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
    * @return <code>true</code> if the device is rooted, <code>false</code> otherwise.
    */
   private boolean isJailBroken() {
-    return containsTestKeys() || isSuperuserPresent() || canExecuteCommand("/system/xbin/which su");
+    if (android.os.Build.VERSION.SDK_INT >= 23) {
+      return checkRootMethod1() || checkRootMethod2() || checkRootMethod3();
+    } else {
+      return containsTestKeys() || isSuperuserPresent() || canExecuteCommand("/system/xbin/which su");
+    }
   }
+
+	private static boolean checkRootMethod1() {
+	    String buildTags = android.os.Build.TAGS;
+	    return buildTags != null && buildTags.contains("test-keys");
+	}
+
+	private static boolean checkRootMethod2() {
+	    String[] paths = { "/system/app/Superuser.apk", "/sbin/su", "/system/bin/su", "/system/xbin/su", "/data/local/xbin/su", "/data/local/bin/su", "/system/sd/xbin/su",
+	            "/system/bin/failsafe/su", "/data/local/su" };
+	    for (String path : paths) {
+	        if (new File(path).exists()) return true;
+	    }
+	    return false;
+	}
+
+	private static boolean checkRootMethod3() {
+	    Process process = null;
+	    try {
+	        process = Runtime.getRuntime().exec(new String[] { "/system/xbin/which", "su" });
+	        BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+	        if (in.readLine() != null) return true;
+	        return false;
+	    } catch (Throwable t) {
+	        return false;
+	    } finally {
+	        if (process != null) process.destroy();
+	    }
+	}
 
   // executes a command on the system
   private static boolean canExecuteCommand(String command) {
@@ -96,7 +130,7 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
     } catch (Exception e) {
       executeResult = false;
     }
- 
+
     return executeResult;
   }
 
@@ -111,7 +145,7 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
 
   /**
     * Checks if the application is installed on the SD card.
-    * 
+    *
     * @return <code>true</code> if the application is installed on the sd card
     */
  private boolean isOnExternalStorage(Context context) {
