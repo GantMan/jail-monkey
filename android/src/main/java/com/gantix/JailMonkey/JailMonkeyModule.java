@@ -10,6 +10,7 @@ import android.provider.Settings;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
+import java.io.BufferedReader;
 
 import java.io.File;
 import java.util.HashMap;
