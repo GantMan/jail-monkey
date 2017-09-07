@@ -69,13 +69,6 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
     return false;
   }
 
-  private boolean containsTestKeys() {
-    // Get from build info
-    String buildTags = android.os.Build.TAGS;
-
-    return buildTags != null && buildTags.contains("test-keys");
-  }
-
   /**
    * Checks if the device is rooted.
    *
@@ -83,16 +76,11 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
    */
   private boolean isJailBroken() {
     if (android.os.Build.VERSION.SDK_INT >= 23) {
-      return checkRootMethod1() || checkRootMethod2() || checkRootMethod3();
+      return checkRootMethod2() || checkRootMethod3();
     } else {
-      return containsTestKeys() || isSuperuserPresent() || canExecuteCommand("/system/xbin/which su");
+      return isSuperuserPresent() || canExecuteCommand("/system/xbin/which su");
     }
   }
-
-	private static boolean checkRootMethod1() {
-	    String buildTags = android.os.Build.TAGS;
-	    return buildTags != null && buildTags.contains("test-keys");
-	}
 
 	private static boolean checkRootMethod2() {
 	    String[] paths = { "/system/app/Superuser.apk", "/sbin/su", "/system/bin/su", "/system/xbin/su", "/data/local/xbin/su", "/data/local/bin/su", "/system/sd/xbin/su",
