@@ -14,6 +14,11 @@
 
 RCT_EXPORT_MODULE();
 
++ (BOOL)requiresMainQueueSetup
+{
+    return YES;
+}
+
 - (BOOL)canViolateSandbox{
 	NSError *error;
 	NSString *stringToBeWritten = @"This is an anti-spoofing test.";
