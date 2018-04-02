@@ -7,8 +7,11 @@
 //
 
 #import "JailMonkey.h"
-#import "RCTLog.h"
 @import UIKit;
+
+static NSString * const JMJailbreakTextFile = @"/private/jailbreak.txt";
+static NSString * const JMisJailBronkenKey = @"isJailBroken";
+static NSString * const JMCanMockLocationKey = @"canMockLocation";
 
 @implementation JailMonkey
 
@@ -19,52 +22,79 @@ RCT_EXPORT_MODULE();
     return YES;
 }
 
+- (NSArray *)pathsToCheck
+{
+    return @[
+             @"/Applications/Cydia.app",
+             @"/Library/MobileSubstrate/MobileSubstrate.dylib",
+             @"/bin/bash",
+             @"/usr/sbin/sshd",
+             @"/etc/apt",
+             @"/private/var/lib/apt",
+             ];
+}
+
+- (NSArray *)schemesToCheck
+{
+    return @[
+             @"cydia://package/com.example.package",
+             ];
+}
+
+- (BOOL)checkPaths
+{
+    BOOL existsPath = NO;
+    
+    for (NSString *path in [self pathsToCheck]) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path]){
+            existsPath = YES;
+            break;
+        }
+    }
+    
+    return existsPath;
+}
+
+- (BOOL)checkSchemes
+{
+    BOOL canOpenScheme = NO;
+    
+    for (NSString *scheme in [self schemesToCheck]) {
+        if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:scheme]]){
+            canOpenScheme = YES;
+            break;
+        }
+    }
+    
+    return canOpenScheme;
+}
+
 - (BOOL)canViolateSandbox{
 	NSError *error;
+    BOOL grantsToWrite = NO;
 	NSString *stringToBeWritten = @"This is an anti-spoofing test.";
-	[stringToBeWritten writeToFile:@"/private/jailbreak.txt" atomically:YES
+	[stringToBeWritten writeToFile:JMJailbreakTextFile atomically:YES
 						  encoding:NSUTF8StringEncoding error:&error];
-	if(error==nil){
+	if(!error){
 		//Device is jailbroken
-		return YES;
-	} else {
-		//Device seems clean
-		[[NSFileManager defaultManager] removeItemAtPath:@"/private/jailbreak.txt" error:nil];
-		return NO;
+		grantsToWrite = YES;
 	}
+    
+    [[NSFileManager defaultManager] removeItemAtPath:JMJailbreakTextFile error:nil];
+    
+    return grantsToWrite;
 }
 
 - (BOOL)isJailBroken{
-	if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Applications/Cydia.app"]){
-		return YES;
-	}else if([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/MobileSubstrate.dylib"]){
-		return YES;
-	}else if([[NSFileManager defaultManager] fileExistsAtPath:@"/bin/bash"]){
-		return YES;
-	}else if([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/sbin/sshd"]){
-		return YES;
-	}else if([[NSFileManager defaultManager] fileExistsAtPath:@"/etc/apt"]){
-		return YES;
-	}else if([[NSFileManager defaultManager] fileExistsAtPath:@"/private/var/lib/apt"]){
-		return YES;
-	}else if(self.canViolateSandbox){
-		return YES;
-	}else if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"cydia://package/com.example.package"]]){
-		return YES;
-	}
-
-	return NO;
+    return [self checkPaths] || [self checkSchemes] || [self canViolateSandbox];
 }
 
 - (NSDictionary *)constantsToExport
 {
-
 	return @{
-			 @"isJailBroken": @(self.isJailBroken),
-			 @"canMockLocation": @(self.isJailBroken)
+			 JMisJailBronkenKey: @(self.isJailBroken),
+			 JMCanMockLocationKey: @(self.isJailBroken)
 			 };
 }
 
 @end
-
-
