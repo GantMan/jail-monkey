@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import static com.gantix.JailMonkey.ExternalStorage.ExternalStorageCheck.isOnExternalStorage;
 import static com.gantix.JailMonkey.MockLocation.MockLocationCheck.isMockLocationOn;
 import static com.gantix.JailMonkey.Rooted.RootedCheck.isJailBroken;
+import static com.gantix.JailMonkey.Rooted.HookDetection.hookDetected;
 
 public class JailMonkeyModule extends ReactContextBaseJavaModule {
 
@@ -37,6 +38,7 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
     ReactContext context = getReactApplicationContext();
     final Map<String, Object> constants = new HashMap<>();
     constants.put("isJailBroken", isJailBroken(context));
+    constants.put("hookDetected", hookDetected(context));
     constants.put("canMockLocation", isMockLocationOn(context));
     constants.put("isOnExternalStorage", isOnExternalStorage(context));
     return constants;
