@@ -1,6 +1,8 @@
 package com.gantix.JailMonkey.Debugged;
 
 import android.content.Context;
+import android.os.Debug;
+import android.content.pm.ApplicationInfo;
 
 public class DebuggedCheck {
     /**
