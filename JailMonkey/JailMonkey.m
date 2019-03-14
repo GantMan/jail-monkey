@@ -12,6 +12,7 @@
 
 static NSString * const JMJailbreakTextFile = @"/private/jailbreak.txt";
 static NSString * const JMisJailBronkenKey = @"isJailBroken";
+static NSString * const JMisDebuggedKey = @"isDebugged";
 static NSString * const JMCanMockLocationKey = @"canMockLocation";
 
 @implementation JailMonkey
@@ -116,6 +117,7 @@ RCT_EXPORT_MODULE();
 {
 	return @{
 			 JMisJailBronkenKey: @(self.isJailBroken),
+			 JMisDebuggedKey: @(self.isDebugged),
 			 JMCanMockLocationKey: @(self.isJailBroken)
 			 };
 }
