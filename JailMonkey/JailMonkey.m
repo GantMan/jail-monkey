@@ -8,9 +8,11 @@
 
 #import "JailMonkey.h"
 @import UIKit;
+@import Darwin.sys.sysctl;
 
 static NSString * const JMJailbreakTextFile = @"/private/jailbreak.txt";
 static NSString * const JMisJailBronkenKey = @"isJailBroken";
+static NSString * const JMisDebuggedKey = @"isDebugged";
 static NSString * const JMCanMockLocationKey = @"canMockLocation";
 
 @implementation JailMonkey
@@ -113,6 +115,28 @@ RCT_EXPORT_MODULE();
     return grantsToWrite;
 }
 
+- (BOOL)isDebugged{
+    struct kinfo_proc info;
+    size_t info_size = sizeof(info);
+    int name[4];
+
+    name[0] = CTL_KERN;
+    name[1] = KERN_PROC;
+    name[2] = KERN_PROC_PID;
+    name[3] = getpid();
+
+    if (sysctl(name, 4, &info, &info_size, NULL, 0) == -1) {
+        NSLog(@"sysctl() failed: %s", strerror(errno));
+        return false;
+    }
+
+    if ((info.kp_proc.p_flag & P_TRACED) != 0) {
+        return true;
+	}
+
+    return false;
+}
+
 - (BOOL)isJailBroken{
     return [self checkPaths] || [self checkSchemes] || [self canViolateSandbox];
 }
@@ -121,6 +145,7 @@ RCT_EXPORT_MODULE();
 {
 	return @{
 			 JMisJailBronkenKey: @(self.isJailBroken),
+			 JMisDebuggedKey: @(self.isDebugged),
 			 JMCanMockLocationKey: @(self.isJailBroken)
 			 };
 }
