@@ -24,6 +24,12 @@ JailMonkey.trustFall()
 
 // (ANDROID ONLY) Check if application is running on external storage
 JailMonkey.isOnExternalStorage()
+
+// (ANDROID ONLY) Check if the phone has some malicious apps installed
+JailMonkey.hookDetected()
+
+// Check if the application is running in debug mode
+JailMonkey.isDebugged()
 ```
 ![Circle of Trust](./_art/trust.jpg)
 
