@@ -1,4 +1,4 @@
-# WARNING:  Currently unsupported.  Happy to merge PRs, but I don't have the devices to test anymore
+# WARNING:  I don't have the devices to test anymore, so testing is done by those submitting PRs bona fide.
 
 ![Jail Monkey](./_art/JailMonkey.jpg)
 ## Can you ever really trust a phone?
