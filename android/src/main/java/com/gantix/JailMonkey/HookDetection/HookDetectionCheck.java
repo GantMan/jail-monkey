@@ -4,7 +4,6 @@ import android.app.ActivityManager;
 import android.content.Context;
 
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import java.util.Arrays;
@@ -17,7 +16,7 @@ public class HookDetectionCheck {
      *
      * @return <code>true</code> if some bad application is installed, <code>false</code> otherwise.
      */
-    public boolean hookDetected(Context context) {
+    public static boolean hookDetected(Context context) {
         PackageManager packageManager = context.getPackageManager();
         List<ApplicationInfo> applicationInfoList = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
         String[] dangerousPackages = {"de.robv.android.xposed.installer", "com.saurik.substrate", "de.robv.android.xposed"};
@@ -31,7 +30,7 @@ public class HookDetectionCheck {
         return advancedHookDetection(context);
     }
 
-    private boolean advancedHookDetection(Context context) {
+    private static boolean advancedHookDetection(Context context) {
         try {
             throw new Exception();
         } catch (Exception e) {
@@ -64,7 +63,7 @@ public class HookDetectionCheck {
         return checkFrida(context);
     }
 
-    private boolean checkFrida(Context context) {
+    private static boolean checkFrida(Context context) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningServiceInfo> runningServices = activityManager.getRunningServices(300);
 

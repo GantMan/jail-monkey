@@ -1,27 +1,17 @@
 package com.gantix.JailMonkey;
 
-import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.provider.Settings;
-
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
-import java.io.BufferedReader;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.InputStreamReader;
 
 import static com.gantix.JailMonkey.ExternalStorage.ExternalStorageCheck.isOnExternalStorage;
 import static com.gantix.JailMonkey.MockLocation.MockLocationCheck.isMockLocationOn;
 import static com.gantix.JailMonkey.Rooted.RootedCheck.isJailBroken;
 import static com.gantix.JailMonkey.Debugged.DebuggedCheck.isDebugged;
-import static com.gantix.JailMonkey.Rooted.HookDetection.hookDetected;
+import static com.gantix.JailMonkey.HookDetection.HookDetectionCheck.hookDetected;
 
 public class JailMonkeyModule extends ReactContextBaseJavaModule {
 
