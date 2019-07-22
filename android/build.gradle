@@ -16,6 +16,6 @@ android {
 }
 
 dependencies {
-    compile 'com.facebook.react:react-native:+'
-    compile 'com.scottyab:rootbeer-lib:0.0.6'
+    implementation 'com.facebook.react:react-native:+'
+    implementation 'com.scottyab:rootbeer-lib:0.0.6'
 }
