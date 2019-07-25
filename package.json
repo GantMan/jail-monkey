@@ -1,16 +1,41 @@
 {
-  "name": "jail-monkey",
-  "version": "2.2.0",
+  "_args": [
+    [
+      "jail-monkey@2.2.0"
+    ]
+  ],
+  "_from": "jail-monkey@2.2.0",
+  "_id": "jail-monkey@2.2.0",
+  "_inBundle": false,
+  "_integrity": "sha512-83e5CiTiR0p/CLBOP1JzI+rKGayyOteyPIpJuoplQcgPpS22jMSOhkx08csupXGmxPs/lEv+XElqCOunKrU/hA==",
+  "_location": "/jail-monkey",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "jail-monkey@2.2.0",
+    "name": "jail-monkey",
+    "escapedName": "jail-monkey",
+    "rawSpec": "2.2.0",
+    "saveSpec": null,
+    "fetchSpec": "2.2.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/jail-monkey/-/jail-monkey-2.2.0.tgz",
+  "_spec": "2.2.0",
+  "author": {
+    "name": "Gant Laborde"
+  },
+  "bugs": {
+    "url": "https://github.com/GantMan/jail-monkey/issues"
+  },
   "description": "A React Native module for identifying jail-broken, rooted, or mock locations on iOS and Android",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo Not yet",
-    "shipit": "np"
+  "devDependencies": {
+    "np": "^2.18.3"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/GantMan/jail-monkey.git"
-  },
+  "homepage": "https://github.com/GantMan/jail-monkey#readme",
   "keywords": [
     "React-Native",
     "Native",
@@ -22,13 +47,19 @@
     "Mock-Locations",
     "Detect"
   ],
-  "author": "Gant Laborde",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/GantMan/jail-monkey/issues"
+  "main": "jailmonkey.js",
+  "name": "jail-monkey",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/GantMan/jail-monkey.git"
   },
-  "homepage": "https://github.com/GantMan/jail-monkey#readme",
-  "devDependencies": {
-    "np": "^2.18.3"
-  }
+  "scripts": {
+    "shipit": "np",
+    "test": "echo Not yet",
+    "flow-check": "npx flow check-contents < jailmonkey.js.flow",
+    "ts-check": "npx tsc jailmonkey.d.ts --noEmit"
+  },
+  "typings": "./jailmonkey.d.ts",
+  "version": "2.2.0"
 }
