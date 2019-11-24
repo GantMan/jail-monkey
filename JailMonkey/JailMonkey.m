@@ -7,6 +7,7 @@
 //
 
 #import "JailMonkey.h"
+#include <TargetConditionals.h>
 @import UIKit;
 @import Darwin.sys.sysctl;
 
@@ -138,6 +139,9 @@ RCT_EXPORT_MODULE();
 }
 
 - (BOOL)isJailBroken{
+    #if TARGET_OS_SIMULATOR
+      return NO;
+    #endif
     return [self checkPaths] || [self checkSchemes] || [self canViolateSandbox];
 }
 
