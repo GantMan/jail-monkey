@@ -44,6 +44,8 @@ react-native link
 
 If you use `rnpm`, you may have trouble as `rnpm` does not link Android properly after 0.29.0!
 
+Note: On Android you should include `location.isFromMockProvider()` from your location provider to compliment `JailMonkey.canMockLocation()`.  Most react-native location libraries already have this check built in
+
 # Additional Info
 This has been made public to help keep it up to date.  As detection measures get better or out-dated, please send updates to this project so it can be the best method of detection.
 
