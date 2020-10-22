@@ -13,7 +13,6 @@
 
 static NSString * const JMJailbreakTextFile = @"/private/jailbreak.txt";
 static NSString * const JMisJailBronkenKey = @"isJailBroken";
-static NSString * const JMisDebuggedKey = @"isDebuggedMode";
 static NSString * const JMCanMockLocationKey = @"canMockLocation";
 
 @implementation JailMonkey
@@ -138,6 +137,12 @@ RCT_EXPORT_MODULE();
     return false;
 }
 
+RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
+    rejecter:(RCTPromiseRejectBlock) __unused reject) {
+    BOOL *isDebuggedModeActived = [self isDebugged]; 
+    resolve(isDebuggedModeActived ? @YES : @NO);
+}
+
 - (BOOL)isJailBroken{
     #if TARGET_OS_SIMULATOR
       return NO;
@@ -148,10 +153,9 @@ RCT_EXPORT_MODULE();
 - (NSDictionary *)constantsToExport
 {
 	return @{
-			 JMisJailBronkenKey: @(self.isJailBroken),
-			 JMisDebuggedKey: @(self.isDebugged),
-			 JMCanMockLocationKey: @(self.isJailBroken)
-			 };
+		JMisJailBronkenKey: @(self.isJailBroken),
+		JMCanMockLocationKey: @(self.isJailBroken)
+	};
 }
 
 @end
