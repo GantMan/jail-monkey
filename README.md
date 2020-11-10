@@ -4,8 +4,8 @@
 ## Can you ever really trust a phone?
 
 # Why?
-Are users claiming they are crossing the globe in seconds and collecting all the Pokeballs?  Some apps need to protect themselves in order to protect data integrity.  JailMonkey allows you to: 
-* Identify if a phone has been jail-broken or rooted for iOS/Android.  
+Are users claiming they are crossing the globe in seconds and collecting all the Pokeballs?  Some apps need to protect themselves in order to protect data integrity.  JailMonkey allows you to:
+* Identify if a phone has been jail-broken or rooted for iOS/Android.
 * Detect mocked locations for phones set in "developer mode".
 * **(ANDROID ONLY)** Detect if the application is running on external storage such as an SD card.
 
