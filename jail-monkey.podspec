@@ -16,5 +16,5 @@ Pod::Spec.new do |s|
 
   s.source_files = "JailMonkey/*.{h,m}"
 
-  s.dependency 'React'
+  s.dependency 'React-Core'
 end
