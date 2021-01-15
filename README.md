@@ -13,33 +13,40 @@ Are users claiming they are crossing the globe in seconds and collecting all the
 ```javascript
 import JailMonkey from 'jail-monkey'
 
-// is this device JailBroken on iOS/Android?
-JailMonkey.isJailBroken()
-
-// Can this device mock location - no need to root!
-JailMonkey.canMockLocation()
-
-// Check if device violates any of the above
-JailMonkey.trustFall()
-
-// (ANDROID ONLY) Check if application is running on external storage
-JailMonkey.isOnExternalStorage()
-
-// (ANDROID ONLY) Check if the phone has some malicious apps installed
-JailMonkey.hookDetected()
-
-// Check if the application is running in debug mode
-JailMonkey.isDebugged()
+if (JailMonkey.isJailBroken()) {
+  // Alternative behaviour for jail-broken/rooted devices.
+}
 ```
+
 ![Circle of Trust](./_art/trust.jpg)
+
+# API
+
+Method | Returns | Description
+---|---|---
+`isJailBroken` | `boolean` | is this device jail-broken/rooted.
+`canMockLocation` | `boolean` | Can this device fake its GPS location.
+`trustFall` | `boolean` | Checks if the device violates either `isJailBroken` or `canMockLocation`.
+`isDebuggedMode` | `Promise<boolean>` | Is the application is running in debug mode. Note that this method returns a Promise.
+
+## Android Only APIs
+
+Method | Returns | Description
+---|---|---
+`hookDetected` | `boolean` | Detects if there is any suspicious installed applications.
+`isOnExternalStorage` | `boolean` | Is the application running on external storage (ie. SD Card)
+`AdbEnabled` | `boolean` | Is Android Debug Bridge enabled.
+`isDevelopmentSettingsMode` | `Promise<boolean>` | Whether user has enabled development settings on their device. Note that this method returns a Promise.
+
+On iOS all of the Android only methods will return `false` or `Promise<false>` where appropriate.
 
 ### :exclamation: Since emulators are usually rooted, you might want to bypass these checks during development.  Unless you're keen on constant false alarms :alarm_clock:
 
 # Install
 
-```
+```bash
 npm i jail-monkey --save
-react-native link
+react-native link # Not required as of React Native 0.60.0
 ```
 
 If you use `rnpm`, you may have trouble as `rnpm` does not link Android properly after 0.29.0!
