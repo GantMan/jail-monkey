@@ -3,6 +3,7 @@
 
 declare const _default: {
   isJailBroken: () => boolean;
+  hookDetected: () => boolean;
   isDebuggedMode: () => Promise<boolean>;
   canMockLocation: () => boolean;
   trustFall: () => boolean;
