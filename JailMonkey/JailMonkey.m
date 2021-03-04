@@ -147,6 +147,13 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
     #if TARGET_OS_SIMULATOR
       return NO;
     #endif
+    BOOL isiOSAppOnMac = false;
+    if (@available(iOS 14.0, *)) {
+        isiOSAppOnMac = [NSProcessInfo processInfo].isiOSAppOnMac;
+    }
+    if (isiOSAppOnMac) {
+        return false;
+    }
     return [self checkPaths] || [self checkSchemes] || [self canViolateSandbox];
 }
 
