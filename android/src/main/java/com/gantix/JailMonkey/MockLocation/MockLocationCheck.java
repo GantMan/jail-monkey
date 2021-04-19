@@ -25,25 +25,27 @@ public class MockLocationCheck {
             List<ApplicationInfo> packages =
                     pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
-            for (ApplicationInfo applicationInfo : packages) {
-                try {
-                    PackageInfo packageInfo = pm.getPackageInfo(applicationInfo.packageName,
-                            PackageManager.GET_PERMISSIONS);
+            if (packages != null) {
+                for (ApplicationInfo applicationInfo : packages) {
+                    try {
+                        PackageInfo packageInfo = pm.getPackageInfo(applicationInfo.packageName,
+                                PackageManager.GET_PERMISSIONS);
 
-                    // Get Permissions
-                    String[] requestedPermissions = packageInfo.requestedPermissions;
+                        // Get Permissions
+                        String[] requestedPermissions = packageInfo.requestedPermissions;
 
-                    if (requestedPermissions != null) {
-                        for (int i = 0; i < requestedPermissions.length; i++) {
-                            if (requestedPermissions[i]
-                                    .equals("android.permission.ACCESS_MOCK_LOCATION")
-                                    && !applicationInfo.packageName.equals(context.getPackageName())) {
-                                return true;
+                        if (requestedPermissions != null) {
+                            for (int i = 0; i < requestedPermissions.length; i++) {
+                                if (requestedPermissions[i]
+                                        .equals("android.permission.ACCESS_MOCK_LOCATION")
+                                        && !applicationInfo.packageName.equals(context.getPackageName())) {
+                                    return true;
+                                }
                             }
                         }
+                    } catch (NameNotFoundException e) {
+                        Log.e("Mock location check error ", e.getMessage());
                     }
-                } catch (NameNotFoundException e) {
-                    Log.e("Mock location check error ", e.getMessage());
                 }
             }
 

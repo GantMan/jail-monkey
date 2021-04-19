@@ -21,9 +21,11 @@ public class HookDetectionCheck {
         List<ApplicationInfo> applicationInfoList = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
         String[] dangerousPackages = {"de.robv.android.xposed.installer", "com.saurik.substrate", "de.robv.android.xposed"};
 
-        for (ApplicationInfo applicationInfo : applicationInfoList) {
-            if (Arrays.asList(dangerousPackages).contains(applicationInfo.packageName)) {
-                return true;
+        if (applicationInfoList != null) {
+            for (ApplicationInfo applicationInfo : applicationInfoList) {
+                if (Arrays.asList(dangerousPackages).contains(applicationInfo.packageName)) {
+                    return true;
+                }
             }
         }
 
