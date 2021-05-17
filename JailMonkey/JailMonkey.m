@@ -5,7 +5,7 @@
 //  Created by Gant Laborde on 7/19/16.
 //  Copyright © 2016 Facebook. All rights reserved.
 //
-
+#import <mach-o/dyld.h>
 #import "JailMonkey.h"
 #include <TargetConditionals.h>
 @import UIKit;
@@ -27,48 +27,119 @@ RCT_EXPORT_MODULE();
 - (NSArray *)pathsToCheck
 {
     return @[
-             @"/Applications/Cydia.app",
-             @"/Library/MobileSubstrate/MobileSubstrate.dylib",
-             @"/bin/bash",
-             @"/usr/sbin/sshd",
-             @"/etc/apt",
-             @"/private/var/lib/apt",
-             @"/usr/sbin/frida-server",
-             @"/usr/bin/cycript",
-             @"/usr/local/bin/cycript",
-             @"/usr/lib/libcycript.dylib",
-             @"/Applications/FakeCarrier.app",
-             @"/Applications/Icy.app",
-             @"/Applications/IntelliScreen.app",
-             @"/Applications/MxTube.app",
-             @"/Applications/RockApp.app",
-             @"/Applications/SBSettings.app",
-             @"/Applications/WinterBoard.app",
-             @"/Applications/blackra1n.app",
-             @"/Library/MobileSubstrate/DynamicLibraries/LiveClock.plist",
-             @"/Library/MobileSubstrate/DynamicLibraries/Veency.plist",
-             @"/System/Library/LaunchDaemons/com.ikey.bbot.plist",
-             @"/System/Library/LaunchDaemons/com.saurik.Cydia.Startup.plist",
-             @"/bin/sh",
-             @"/etc/ssh/sshd_config",
-             @"/private/var/lib/cydia",
-             @"/private/var/mobile/Library/SBSettings/Themes",
-             @"/private/var/stash",
-             @"/private/var/tmp/cydia.log",
-             @"/usr/bin/sshd",
-             @"/usr/libexec/sftp-server",
-             @"/usr/libexec/ssh-keysign",
-             @"/var/cache/apt",
-             @"/var/lib/apt",
-             @"/var/lib/cydia",
-             ];
+            @"/.bootstrapped_electra",
+            @"/.cydia_no_stash",
+            @"/.installed_unc0ver",
+            @"/Applications/Cydia.app",
+            @"/Applications/FakeCarrier.app",
+            @"/Applications/Icy.app",
+            @"/Applications/IntelliScreen.app",
+            @"/Applications/MxTube.app",
+            @"/Applications/RockApp.app",
+            @"/Applications/SBSettings.app",
+            @"/Applications/Snoop-itConfig.app",
+            @"/Applications/WinterBoard.app",
+            @"/Applications/blackra1n.app",
+            @"/Library/MobileSubstrate/CydiaSubstrate.dylib",
+            @"/Library/MobileSubstrate/DynamicLibraries/LiveClock.plist",
+            @"/Library/MobileSubstrate/DynamicLibraries/Veency.plist",
+            @"/Library/MobileSubstrate/MobileSubstrate.dylib",
+            @"/System/Library/LaunchDaemons/com.ikey.bbot.plist",
+            @"/System/Library/LaunchDaemons/com.saurik.Cydia.Startup.plist",
+            @"/bin/bash",
+            @"/bin/sh",
+            @"/etc/apt",
+            @"/etc/apt/sources.list.d/electra.list",
+            @"/etc/apt/sources.list.d/sileo.sources",
+            @"/etc/apt/undecimus/undecimus.list",
+            @"/etc/ssh/sshd_config",
+            @"/jb/amfid_payload.dylib",
+            @"/jb/jailbreakd.plist",
+            @"/jb/libjailbreak.dylib",
+            @"/jb/lzma",
+            @"/jb/offsets.plist",
+            @"/private/etc/apt",
+            @"/private/etc/dpkg/origins/debian",
+            @"/private/etc/ssh/sshd_config",
+            @"/private/var/Users/",
+            @"/private/var/cache/apt/",
+            @"/private/var/lib/apt",
+            @"/private/var/lib/cydia",
+            @"/private/var/log/syslog",
+            @"/private/var/mobile/Library/SBSettings/Themes",
+            @"/private/var/stash",
+            @"/private/var/tmp/cydia.log",
+            @"/usr/bin/cycript",
+            @"/usr/bin/sshd",
+            @"/usr/lib/libcycript.dylib",
+            @"/usr/lib/libjailbreak.dylib",
+            @"/usr/libexec/cydia",
+            @"/usr/libexec/cydia/firmware.sh",
+            @"/usr/libexec/sftp-server",
+            @"/usr/libexec/ssh-keysign",
+            @"/usr/local/bin/cycript",
+            @"/usr/sbin/frida-server",
+            @"/usr/sbin/sshd",
+            @"/usr/share/jailbreak/injectme.plist",
+            @"/var/binpack",
+            @"/var/cache/apt",
+            @"/var/checkra1n.dmg",
+            @"/var/lib/apt",
+            @"/var/lib/cydia",
+            @"/var/lib/dpkg/info/mobilesubstrate.md5sums",
+            @"/var/log/apt"
+            ];
 }
 
 - (NSArray *)schemesToCheck
 {
     return @[
-             @"cydia://package/com.example.package",
-             ];
+            @"cydia://package/com.example.package",
+            @"sileo://package/com.example.package",
+            @"undecimus://package/com.example.package",
+            @"zbra://package/com.example.package"
+            ];
+}
+
+- (NSArray *)symlinksToCheck
+{
+    return @[
+            @"/var/lib/undecimus/apt",
+            @"/Applications",
+            @"/Library/Ringtones",
+            @"/Library/Wallpaper",
+            @"/usr/arm-apple-darwin9",
+            @"/usr/include",
+            @"/usr/libexec",
+            @"/usr/share"
+            ];
+}
+
+- (NSArray *)dylibsToCheck
+{
+    return @[
+            @"...!@#",
+            @"/.file",
+            @"/usr/lib/Cephei.framework/Cephei",
+            @"0Shadow.dylib",
+            @"CustomWidgetIcons",
+            @"CydiaSubstrate",
+            @"FridaGadget",
+            @"MobileSubstrate.dylib",
+            @"PreferenceLoader",
+            @"RocketBootstrap",
+            @"SSLKillSwitch.dylib",
+            @"SSLKillSwitch2.dylib",
+            @"SubstrateInserter.dylib",
+            @"SubstrateLoader.dylib",
+            @"TweakInject.dylib",
+            @"WeeLoader",
+            @"cyinject",
+            @"libcycript",
+            @"libsparkapplist.dylib",
+            @"zzzzLiberty.dylib",
+            @"zzzzzzUnSub.dylib"
+            ];
 }
 
 - (BOOL)checkPaths
@@ -99,6 +170,23 @@ RCT_EXPORT_MODULE();
     return canOpenScheme;
 }
 
+- (BOOL)checkDylibs
+{
+    NSString *imagePath;
+    
+    for (int i=0; i < _dyld_image_count(); i++) {
+        imagePath = [NSString stringWithUTF8String:_dyld_get_image_name(i)];
+        
+        for (NSString *dylibPath in [self dylibsToCheck]) {
+            if([imagePath localizedCaseInsensitiveContainsString:dylibPath]) {
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+
 - (BOOL)canViolateSandbox{
 	NSError *error;
     BOOL grantsToWrite = NO;
@@ -113,6 +201,31 @@ RCT_EXPORT_MODULE();
     [[NSFileManager defaultManager] removeItemAtPath:JMJailbreakTextFile error:nil];
 
     return grantsToWrite;
+}
+
+- (BOOL)canFork
+{
+    int pid = fork();
+    if(!pid) {
+        exit(1);
+    }
+    if(pid >= 0) {
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)checkSymlinks
+{
+    for (NSString *symlink in [self symlinksToCheck]) {
+        NSString* result = [[NSFileManager defaultManager] destinationOfSymbolicLinkAtPath:symlink error:nil];
+        if([result length] > 0) {
+            return YES;
+        }
+    }
+
+    return NO;
 }
 
 - (BOOL)isDebugged{
@@ -154,7 +267,7 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
     if (isiOSAppOnMac) {
         return false;
     }
-    return [self checkPaths] || [self checkSchemes] || [self canViolateSandbox];
+    return [self checkPaths] || [self checkSchemes] || [self canViolateSandbox] || [self canFork] || [self checkSymlinks] || [self checkDylibs];
 }
 
 - (NSDictionary *)constantsToExport
