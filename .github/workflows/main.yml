@@ -2,7 +2,7 @@
 
 name: Android Build
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
@@ -19,18 +19,14 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
-        
+
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      
-      - uses: c-hive/gha-yarn-cache@v1
-          
-      - name: Change directory
-        run: cd ExampleProject/
 
+      - uses: c-hive/gha-yarn-cache@v1
       - name: Yarn
-        run: yarn install
+        run: cd ExampleProject && yarn install
 
       - name: Cache Gradle Wrapper
         uses: actions/cache@v2
@@ -47,8 +43,8 @@ jobs:
             ${{ runner.os }}-gradle-caches-
 
       - name: Make Gradlew Executable
-        run: cd android && chmod +x ./gradlew
+        run: cd ExampleProject/android && chmod +x ./gradlew
 
       - name: Build Android App Bundle
         run: |
-          cd android && ./gradlew bundleRelease --no-daemon
+          cd ExampleProject/android && ./gradlew bundleRelease --no-daemon
