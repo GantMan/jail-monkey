@@ -61,5 +61,5 @@
     "ts-check": "npx tsc jailmonkey.d.ts --noEmit"
   },
   "typings": "./jailmonkey.d.ts",
-  "version": "2.3.4"
+  "version": "2.4.0"
 }
