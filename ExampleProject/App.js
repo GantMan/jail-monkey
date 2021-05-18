@@ -64,7 +64,7 @@ function Row({label, value}) {
     <View
       style={styles.row}
       accessibilityLabel={`${label}: ${value?.toString() ?? 'unknown'}`}>
-      <Text style={styles.label}>{label}:</Text>
+      <Text style={styles.label}>{`${label}: `}</Text>
       <Text style={styles.value}>{value?.toString() ?? 'unknown'}</Text>
     </View>
   );
@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#444',
     fontWeight: '700',
-    marginRight: 5,
   },
   value: {
     fontSize: 16,
