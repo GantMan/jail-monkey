@@ -1,6 +1,9 @@
 # WARNING:  I don't have the devices to test anymore, so testing is done by those submitting PRs bona fide.
 
 ![Jail Monkey](./_art/JailMonkey.jpg)
+
+[![Version](https://img.shields.io/npm/v/jail-monkey.svg)](https://www.npmjs.com/package/jail-monkey) [![Downloads](https://img.shields.io/npm/dm/jail-monkey.svg)](https://npmcharts.com/compare/jail-monkey?minimal=true)
+
 ## Can you ever really trust a phone?
 
 # Why?
