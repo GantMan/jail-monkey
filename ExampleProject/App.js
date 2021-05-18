@@ -10,19 +10,6 @@ import * as React from 'react';
 import {SafeAreaView, ScrollView, View, StyleSheet, Text} from 'react-native';
 import JailMonkey from 'jail-monkey';
 
-/*
-const JailMonkey: {
-    isJailBroken: () => boolean;
-    hookDetected: () => boolean;
-    isDebuggedMode: () => Promise<boolean>;
-    canMockLocation: () => boolean;
-    trustFall: () => boolean;
-    isOnExternalStorage: () => boolean;
-    AdbEnabled: () => boolean;
-    isDevelopmentSettingsMode: () => Promise<boolean>;
-}
-*/
-
 export default function App() {
   const [isDevelopmentSettingsMode, setIsDevelopmentSettingsMode] =
     React.useState();
@@ -47,9 +34,16 @@ export default function App() {
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.content} accessible={false} accessibilityLabel="">
+        <Text style={styles.title}>Android & iOS</Text>
         <Row label="isJailBroken" value={JailMonkey.isJailBroken()} />
         <Row label="canMockLocation" value={JailMonkey.canMockLocation()} />
         <Row label="trustFall" value={JailMonkey.trustFall()} />
+        <Row label="isDebuggedMode" value={isDebuggedMode} />
+
+        <Text style={styles.title}>Android</Text>
+        <Text style={styles.note}>
+          These APIs will always return false on iOS.
+        </Text>
         <Row label="hookDetected" value={JailMonkey.hookDetected()} />
         <Row
           label="isOnExternalStorage"
@@ -60,7 +54,6 @@ export default function App() {
           label="isDevelopmentSettingsMode"
           value={isDevelopmentSettingsMode}
         />
-        <Row label="isDebuggedMode" value={isDebuggedMode} />
       </View>
     </SafeAreaView>
   );
@@ -80,9 +73,22 @@ function Row({label, value}) {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   content: {
     padding: 20,
+  },
+  title: {
+    fontSize: 26,
+    color: '#000',
+    fontWeight: '700',
+    marginTop: 20,
+    marginBottom: 5,
+  },
+  note: {
+    fontSize: 11,
+    color: '#888',
+    marginBottom: 10,
   },
   row: {
     flexDirection: 'row',
@@ -90,12 +96,12 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    color: 'black',
+    color: '#444',
     fontWeight: '700',
-    marginRight: 10,
+    marginRight: 5,
   },
   value: {
     fontSize: 16,
-    color: 'black',
+    color: '#444',
   },
 });
