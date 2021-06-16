@@ -2,6 +2,7 @@
 // import JailMonkey from 'jail-monkey';
 
 declare const _default: {
+  jailBrokenMessage : () => string,
   isJailBroken: () => boolean;
   hookDetected: () => boolean;
   isDebuggedMode: () => Promise<boolean>;
