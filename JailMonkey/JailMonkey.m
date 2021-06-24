@@ -14,6 +14,7 @@
 static NSString * const JMJailbreakTextFile = @"/private/jailbreak.txt";
 static NSString * const JMisJailBronkenKey = @"isJailBroken";
 static NSString * const JMCanMockLocationKey = @"canMockLocation";
+static NSString * const JMJailBrokenMessageKey = @"jailBrokenMessage";
 
 @implementation JailMonkey
 
@@ -278,11 +279,97 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
     return [self checkPaths] || [self checkSchemes] || [self canViolateSandbox] || [self canFork] || [self checkSymlinks] || [self checkDylibs];
 }
 
+
+-(NSString *)jailBrokenMessage{
+    NSString *errorMessage = @"";
+    
+    if([self isJailBroken])
+    {
+        if ([self checkPaths]) {
+        errorMessage = [NSString stringWithFormat:@"%@,#%@", errorMessage, @"checkPaths"];
+            errorMessage =[NSString stringWithFormat:@"%@,[%@]", errorMessage, [self checkPathsMessage]];
+        }
+        if ([self checkSchemes]) {
+        errorMessage = [NSString stringWithFormat:@"%@,#%@", errorMessage, @"checkSchemes"];
+            errorMessage =[NSString stringWithFormat:@"%@,[%@]", errorMessage, [self checkSchemesMessage]];
+        }
+        if ([self canViolateSandbox]) {
+        errorMessage = [NSString stringWithFormat:@"%@,#%@", errorMessage, @"canViolateSandbox"];
+        }
+        if ([self canFork]) {
+        errorMessage = [NSString stringWithFormat:@"%@,#%@", errorMessage, @"canFork"];
+        }
+        if ([self checkSymlinks]) {
+            errorMessage = [NSString stringWithFormat:@"%@,#%@", errorMessage, @"checkSymlinks"];
+            errorMessage =[NSString stringWithFormat:@"%@,[%@]", errorMessage, [self checkSymlinksMessage]];
+        }
+        if ([self checkDylibs]) {
+            errorMessage = [NSString stringWithFormat:@"%@,#%@", errorMessage, @"checkDylibs"];
+            errorMessage =[NSString stringWithFormat:@"%@,[%@]", errorMessage, [self checkDylibsMessage]];
+        }
+    }
+   return errorMessage;
+}
+
+- (NSString *)checkSchemesMessage
+{
+    NSString *schemeMessage = @"";
+    for (NSString *scheme in [self schemesToCheck]) {
+        if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:scheme]]){
+            schemeMessage = [NSString stringWithFormat:@"%@,%@", schemeMessage, scheme];
+            break;
+        }
+    }
+    return schemeMessage;
+}
+
+- (NSString *)checkPathsMessage
+{
+    NSString *existsPath = @"";
+    for (NSString *path in [self pathsToCheck]) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path]){
+            existsPath = [NSString stringWithFormat:@"%@,%@", existsPath, path];
+            break;
+        }
+    }
+    return existsPath;
+}
+
+
+- (NSString *)checkSymlinksMessage
+{
+    NSString *symLinkMessage = @"";
+    for (NSString *symlink in [self symlinksToCheck]) {
+        NSString* result = [[NSFileManager defaultManager] destinationOfSymbolicLinkAtPath:symlink error:nil];
+        if([result length] > 0) {
+            symLinkMessage = [NSString stringWithFormat:@"%@,%@", symLinkMessage, symlink];
+        }
+    }
+    return symLinkMessage;
+}
+
+- (NSString *)checkDylibsMessage
+{
+    NSString *imagePath = @"";
+    
+    for (int i=0; i < _dyld_image_count(); i++) {
+        imagePath = [NSString stringWithUTF8String:_dyld_get_image_name(i)];
+        
+        for (NSString *dylibPath in [self dylibsToCheck]) {
+            if([imagePath localizedCaseInsensitiveContainsString:dylibPath]) {
+                imagePath = [NSString stringWithFormat:@"%@,%@", imagePath, dylibPath];
+            }
+        }
+    }
+    return imagePath;
+}
+
 - (NSDictionary *)constantsToExport
 {
 	return @{
 		JMisJailBronkenKey: @(self.isJailBroken),
-		JMCanMockLocationKey: @(self.isJailBroken)
+		JMCanMockLocationKey: @(self.isJailBroken),
+        JMJailBrokenMessageKey : [self jailBrokenMessage]
 	};
 }
 
