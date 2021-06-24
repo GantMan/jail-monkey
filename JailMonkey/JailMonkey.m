@@ -173,17 +173,17 @@ RCT_EXPORT_MODULE();
 - (BOOL)checkDylibs
 {
     NSString *imagePath;
-    
+
     for (int i=0; i < _dyld_image_count(); i++) {
         imagePath = [NSString stringWithUTF8String:_dyld_get_image_name(i)];
-        
+
         for (NSString *dylibPath in [self dylibsToCheck]) {
             if([imagePath localizedCaseInsensitiveContainsString:dylibPath]) {
                 return YES;
             }
         }
     }
-    
+
     return NO;
 }
 
@@ -212,7 +212,7 @@ RCT_EXPORT_MODULE();
     if(pid >= 0) {
         return YES;
     }
-    
+
     return NO;
 }
 
@@ -252,7 +252,7 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
     rejecter:(RCTPromiseRejectBlock) __unused reject) {
-    BOOL *isDebuggedModeActived = [self isDebugged]; 
+    BOOL *isDebuggedModeActived = [self isDebugged];
     resolve(isDebuggedModeActived ? @YES : @NO);
 }
 
@@ -261,9 +261,17 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
       return NO;
     #endif
     BOOL isiOSAppOnMac = false;
-    if (@available(iOS 14.0, *)) {
-        isiOSAppOnMac = [NSProcessInfo processInfo].isiOSAppOnMac;
-    }
+
+    #if defined(__IPHONE_14_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 140000
+        if (@available(iOS 14.0, *)) {
+            // Early iOS 14 betas do not include isiOSAppOnMac
+            isiOSAppOnMac = (
+                [[NSProcessInfo processInfo] respondsToSelector:@selector(isiOSAppOnMac)] &&
+                [NSProcessInfo processInfo].isiOSAppOnMac
+            );
+        }
+    #endif // defined(__IPHONE_14_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 140000
+
     if (isiOSAppOnMac) {
         return false;
     }
