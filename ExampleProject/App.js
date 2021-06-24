@@ -7,15 +7,15 @@
  */
 
 import * as React from 'react';
-import {SafeAreaView, ScrollView, View, StyleSheet, Text} from 'react-native';
+import {SafeAreaView, View, StyleSheet, Text} from 'react-native';
 import JailMonkey from 'jail-monkey';
+const {useState, useEffect} = React;
 
 export default function App() {
-  const [isDevelopmentSettingsMode, setIsDevelopmentSettingsMode] =
-    React.useState();
-  const [isDebuggedMode, setIsDebuggedMode] = React.useState();
+  const [isDevelopmentSettingsMode, setIsDevelopmentSettingsMode] = useState();
+  const [isDebuggedMode, setIsDebuggedMode] = useState();
 
-  React.useEffect(() => {
+  useEffect(() => {
     JailMonkey.isDevelopmentSettingsMode()
       .then(value => {
         setIsDevelopmentSettingsMode(value);
@@ -23,7 +23,7 @@ export default function App() {
       .catch(console.warn);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     JailMonkey.isDebuggedMode()
       .then(value => {
         setIsDebuggedMode(value);
