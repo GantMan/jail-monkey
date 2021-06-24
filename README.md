@@ -32,6 +32,12 @@ Method | Returns | Description
 `trustFall` | `boolean` | Checks if the device violates either `isJailBroken` or `canMockLocation`.
 `isDebuggedMode` | `Promise<boolean>` | Is the application is running in debug mode. Note that this method returns a Promise.
 
+## iOS Only APIs
+
+Method | Returns | Description
+---|---|---
+`jailBrokenMessage` | `string` | Returns the reason for jailbroken detection. Will return an empty string on Android.
+
 ## Android Only APIs
 
 Method | Returns | Description
