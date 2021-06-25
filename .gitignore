@@ -54,3 +54,5 @@ buck-out/
 
 # Bundle artifact
 *.jsbundle
+ExampleProject/android/app/src/main/assets/index.android.bundle
+android/app/src/main/res/raw/app.json
