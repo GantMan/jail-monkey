@@ -44,7 +44,7 @@ public class MockLocationCheck {
                             }
                         }
                     } catch (NameNotFoundException e) {
-                        Log.e("Mock location check error ", e.getMessage());
+                        Log.e("Mock location check error", e.getMessage());
                     }
                 }
             }
