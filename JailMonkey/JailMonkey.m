@@ -298,10 +298,17 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
     return [self checkPaths] || [self checkSchemes] || [self canViolateSandbox] || [self canFork] || [self checkSymlinks] || [self checkDylibs];
 }
 
+- (BOOL)canMockLocation{
+    #if TARGET_OS_SIMULATOR
+      return YES;
+    #endif
+
+    return [self isJailBroken];
+}
 
 -(NSString *)jailBrokenMessage{
     NSString *errorMessage = @"";
-    
+
     if([self isJailBroken])
     {
         if ([self checkPaths]) {
@@ -370,10 +377,10 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
 - (NSString *)checkDylibsMessage
 {
     NSString *imagePath = @"";
-    
+
     for (int i=0; i < _dyld_image_count(); i++) {
         imagePath = [NSString stringWithUTF8String:_dyld_get_image_name(i)];
-        
+
         for (NSString *dylibPath in [self dylibsToCheck]) {
             if([imagePath localizedCaseInsensitiveContainsString:dylibPath]) {
                 imagePath = [NSString stringWithFormat:@"%@,%@", imagePath, dylibPath];
@@ -387,7 +394,7 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
 {
 	return @{
 		JMisJailBronkenKey: @(self.isJailBroken),
-		JMCanMockLocationKey: @(self.isJailBroken),
+		JMCanMockLocationKey: @(self.canMockLocation),
         JMJailBrokenMessageKey : [self jailBrokenMessage]
 	};
 }
