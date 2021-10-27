@@ -2,6 +2,8 @@ import { NativeModules, Platform } from "react-native";
 
 const { JailMonkey } = NativeModules;
 
+if (JailMonkey == null) console.warn("JailMonkey is not available, check your native dependencies have linked correctly and ensure your app has been rebuilt");
+
 export default {
   jailBrokenMessage: () => JailMonkey.jailBrokenMessage || "",
   isJailBroken: () => JailMonkey.isJailBroken || false,
