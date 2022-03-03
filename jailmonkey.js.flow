@@ -1,7 +1,9 @@
 // @flow
 
 declare module.exports: {
+  jailBrokenMessage: () => string,
   isJailBroken: () => boolean,
+  hookDetected: () => boolean,
   isDebuggedMode: () => Promise<boolean>,
   canMockLocation: () => boolean,
   trustFall: () => boolean,

@@ -5,7 +5,7 @@
 //  Created by Gant Laborde on 7/19/16.
 //  Copyright © 2016 Facebook. All rights reserved.
 //
-
+#import <mach-o/dyld.h>
 #import "JailMonkey.h"
 #include <TargetConditionals.h>
 @import UIKit;
@@ -13,8 +13,8 @@
 
 static NSString * const JMJailbreakTextFile = @"/private/jailbreak.txt";
 static NSString * const JMisJailBronkenKey = @"isJailBroken";
-static NSString * const JMisDebuggedKey = @"isDebuggedMode";
 static NSString * const JMCanMockLocationKey = @"canMockLocation";
+static NSString * const JMJailBrokenMessageKey = @"jailBrokenMessage";
 
 @implementation JailMonkey
 
@@ -28,48 +28,138 @@ RCT_EXPORT_MODULE();
 - (NSArray *)pathsToCheck
 {
     return @[
-             @"/Applications/Cydia.app",
-             @"/Library/MobileSubstrate/MobileSubstrate.dylib",
-             @"/bin/bash",
-             @"/usr/sbin/sshd",
-             @"/etc/apt",
-             @"/private/var/lib/apt",
-             @"/usr/sbin/frida-server",
-             @"/usr/bin/cycript",
-             @"/usr/local/bin/cycript",
-             @"/usr/lib/libcycript.dylib",
-             @"/Applications/FakeCarrier.app",
-             @"/Applications/Icy.app",
-             @"/Applications/IntelliScreen.app",
-             @"/Applications/MxTube.app",
-             @"/Applications/RockApp.app",
-             @"/Applications/SBSettings.app",
-             @"/Applications/WinterBoard.app",
-             @"/Applications/blackra1n.app",
-             @"/Library/MobileSubstrate/DynamicLibraries/LiveClock.plist",
-             @"/Library/MobileSubstrate/DynamicLibraries/Veency.plist",
-             @"/System/Library/LaunchDaemons/com.ikey.bbot.plist",
-             @"/System/Library/LaunchDaemons/com.saurik.Cydia.Startup.plist",
-             @"/bin/sh",
-             @"/etc/ssh/sshd_config",
-             @"/private/var/lib/cydia",
-             @"/private/var/mobile/Library/SBSettings/Themes",
-             @"/private/var/stash",
-             @"/private/var/tmp/cydia.log",
-             @"/usr/bin/sshd",
-             @"/usr/libexec/sftp-server",
-             @"/usr/libexec/ssh-keysign",
-             @"/var/cache/apt",
-             @"/var/lib/apt",
-             @"/var/lib/cydia",
-             ];
+            @"/.bootstrapped_electra",
+            @"/.cydia_no_stash",
+            @"/.installed_unc0ver",
+            @"/Applications/Cydia.app",
+            @"/Applications/FakeCarrier.app",
+            @"/Applications/Icy.app",
+            @"/Applications/IntelliScreen.app",
+            @"/Applications/MxTube.app",
+            @"/Applications/RockApp.app",
+            @"/Applications/SBSettings.app",
+            @"/Applications/Sileo.app",
+            @"/Applications/Snoop-itConfig.app",
+            @"/Applications/WinterBoard.app",
+            @"/Applications/blackra1n.app",
+            @"/Library/MobileSubstrate/CydiaSubstrate.dylib",
+            @"/Library/MobileSubstrate/DynamicLibraries/LiveClock.plist",
+            @"/Library/MobileSubstrate/DynamicLibraries/Veency.plist",
+            @"/Library/MobileSubstrate/MobileSubstrate.dylib",
+            @"/Library/PreferenceBundles/ABypassPrefs.bundle",
+            @"/Library/PreferenceBundles/FlyJBPrefs.bundle",
+            @"/Library/PreferenceBundles/LibertyPref.bundle",
+            @"/Library/PreferenceBundles/ShadowPreferences.bundle",
+            @"/System/Library/LaunchDaemons/com.ikey.bbot.plist",
+            @"/System/Library/LaunchDaemons/com.saurik.Cydia.Startup.plist",
+            @"/bin/bash",
+            @"/bin/sh",
+            @"/etc/apt",
+            @"/etc/apt/sources.list.d/electra.list",
+            @"/etc/apt/sources.list.d/sileo.sources",
+            @"/etc/apt/undecimus/undecimus.list",
+            @"/etc/ssh/sshd_config",
+            @"/jb/amfid_payload.dylib",
+            @"/jb/jailbreakd.plist",
+            @"/jb/libjailbreak.dylib",
+            @"/jb/lzma",
+            @"/jb/offsets.plist",
+            @"/private/etc/apt",
+            @"/private/etc/dpkg/origins/debian",
+            @"/private/etc/ssh/sshd_config",
+            @"/private/var/Users/",
+            @"/private/var/cache/apt/",
+            @"/private/var/lib/apt",
+            @"/private/var/lib/cydia",
+            @"/private/var/log/syslog",
+            @"/private/var/mobile/Library/SBSettings/Themes",
+            @"/private/var/stash",
+            @"/private/var/tmp/cydia.log",
+            @"/usr/bin/cycript",
+            @"/usr/bin/sshd",
+            @"/usr/lib/libcycript.dylib",
+            @"/usr/lib/libhooker.dylib",
+            @"/usr/lib/libjailbreak.dylib",
+            @"/usr/lib/libsubstitute.dylib",
+            @"/usr/lib/substrate",
+            @"/usr/lib/TweakInject",
+            @"/usr/libexec/cydia",
+            @"/usr/libexec/cydia/firmware.sh",
+            @"/usr/libexec/sftp-server",
+            @"/usr/libexec/ssh-keysign",
+            @"/usr/local/bin/cycript",
+            @"/usr/sbin/frida-server",
+            @"/usr/sbin/sshd",
+            @"/usr/share/jailbreak/injectme.plist",
+            @"/var/binpack",
+            @"/var/cache/apt",
+            @"/var/checkra1n.dmg",
+            @"/var/lib/apt",
+            @"/var/lib/cydia",
+            @"/var/lib/dpkg/info/mobilesubstrate.md5sums",
+            @"/var/log/apt"
+            ];
 }
 
 - (NSArray *)schemesToCheck
 {
     return @[
-             @"cydia://package/com.example.package",
-             ];
+            @"activator://package/com.example.package",
+            @"cydia://package/com.example.package",
+            @"filza://package/com.example.package",
+            @"sileo://package/com.example.package",
+            @"undecimus://package/com.example.package",
+            @"zbra://package/com.example.package"
+            ];
+}
+
+- (NSArray *)symlinksToCheck
+{
+    return @[
+            @"/var/lib/undecimus/apt",
+            @"/Applications",
+            @"/Library/Ringtones",
+            @"/Library/Wallpaper",
+            @"/usr/arm-apple-darwin9",
+            @"/usr/include",
+            @"/usr/libexec",
+            @"/usr/share"
+            ];
+}
+
+- (NSArray *)dylibsToCheck
+{
+    return @[
+            @"...!@#",
+            @"/.file",
+            @"/usr/lib/Cephei.framework/Cephei",
+            @"0Shadow.dylib",
+            @"ABypass",
+            @"Cephei",
+            @"CustomWidgetIcons",
+            @"CydiaSubstrate",
+            @"Electra",
+            @"FlyJB",
+            @"FridaGadget",
+            @"MobileSubstrate.dylib",
+            @"PreferenceLoader",
+            @"RocketBootstrap",
+            @"SSLKillSwitch.dylib",
+            @"SSLKillSwitch2.dylib",
+            @"Substitute",
+            @"SubstrateBootstrap",
+            @"SubstrateInserter",
+            @"SubstrateInserter.dylib",
+            @"SubstrateLoader.dylib",
+            @"TweakInject.dylib",
+            @"WeeLoader",
+            @"cyinject",
+            @"libcycript",
+            @"libhooker",
+            @"libsparkapplist.dylib",
+            @"zzzzLiberty.dylib",
+            @"zzzzzzUnSub.dylib"
+            ];
 }
 
 - (BOOL)checkPaths
@@ -100,6 +190,23 @@ RCT_EXPORT_MODULE();
     return canOpenScheme;
 }
 
+- (BOOL)checkDylibs
+{
+    NSString *imagePath;
+
+    for (int i=0; i < _dyld_image_count(); i++) {
+        imagePath = [NSString stringWithUTF8String:_dyld_get_image_name(i)];
+
+        for (NSString *dylibPath in [self dylibsToCheck]) {
+            if([imagePath localizedCaseInsensitiveContainsString:dylibPath]) {
+                return YES;
+            }
+        }
+    }
+
+    return NO;
+}
+
 - (BOOL)canViolateSandbox{
 	NSError *error;
     BOOL grantsToWrite = NO;
@@ -114,6 +221,31 @@ RCT_EXPORT_MODULE();
     [[NSFileManager defaultManager] removeItemAtPath:JMJailbreakTextFile error:nil];
 
     return grantsToWrite;
+}
+
+- (BOOL)canFork
+{
+    int pid = fork();
+    if(!pid) {
+        exit(1);
+    }
+    if(pid >= 0) {
+        return YES;
+    }
+
+    return NO;
+}
+
+- (BOOL)checkSymlinks
+{
+    for (NSString *symlink in [self symlinksToCheck]) {
+        NSString* result = [[NSFileManager defaultManager] destinationOfSymbolicLinkAtPath:symlink error:nil];
+        if([result length] > 0) {
+            return YES;
+        }
+    }
+
+    return NO;
 }
 
 - (BOOL)isDebugged{
@@ -138,20 +270,126 @@ RCT_EXPORT_MODULE();
     return false;
 }
 
+RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
+    rejecter:(RCTPromiseRejectBlock) __unused reject) {
+    BOOL *isDebuggedModeActived = [self isDebugged];
+    resolve(isDebuggedModeActived ? @YES : @NO);
+}
+
 - (BOOL)isJailBroken{
     #if TARGET_OS_SIMULATOR
       return NO;
     #endif
-    return [self checkPaths] || [self checkSchemes] || [self canViolateSandbox];
+    BOOL isiOSAppOnMac = false;
+
+    #if defined(__IPHONE_14_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 140000
+        if (@available(iOS 14.0, *)) {
+            // Early iOS 14 betas do not include isiOSAppOnMac
+            isiOSAppOnMac = (
+                [[NSProcessInfo processInfo] respondsToSelector:@selector(isiOSAppOnMac)] &&
+                [NSProcessInfo processInfo].isiOSAppOnMac
+            );
+        }
+    #endif // defined(__IPHONE_14_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 140000
+
+    if (isiOSAppOnMac) {
+        return false;
+    }
+    return [self checkPaths] || [self checkSchemes] || [self canViolateSandbox] || [self canFork] || [self checkSymlinks] || [self checkDylibs];
+}
+
+
+-(NSString *)jailBrokenMessage{
+    NSString *errorMessage = @"";
+    
+    if([self isJailBroken])
+    {
+        if ([self checkPaths]) {
+        errorMessage = [NSString stringWithFormat:@"%@,#%@", errorMessage, @"checkPaths"];
+            errorMessage =[NSString stringWithFormat:@"%@,[%@]", errorMessage, [self checkPathsMessage]];
+        }
+        if ([self checkSchemes]) {
+        errorMessage = [NSString stringWithFormat:@"%@,#%@", errorMessage, @"checkSchemes"];
+            errorMessage =[NSString stringWithFormat:@"%@,[%@]", errorMessage, [self checkSchemesMessage]];
+        }
+        if ([self canViolateSandbox]) {
+        errorMessage = [NSString stringWithFormat:@"%@,#%@", errorMessage, @"canViolateSandbox"];
+        }
+        if ([self canFork]) {
+        errorMessage = [NSString stringWithFormat:@"%@,#%@", errorMessage, @"canFork"];
+        }
+        if ([self checkSymlinks]) {
+            errorMessage = [NSString stringWithFormat:@"%@,#%@", errorMessage, @"checkSymlinks"];
+            errorMessage =[NSString stringWithFormat:@"%@,[%@]", errorMessage, [self checkSymlinksMessage]];
+        }
+        if ([self checkDylibs]) {
+            errorMessage = [NSString stringWithFormat:@"%@,#%@", errorMessage, @"checkDylibs"];
+            errorMessage =[NSString stringWithFormat:@"%@,[%@]", errorMessage, [self checkDylibsMessage]];
+        }
+    }
+   return errorMessage;
+}
+
+- (NSString *)checkSchemesMessage
+{
+    NSString *schemeMessage = @"";
+    for (NSString *scheme in [self schemesToCheck]) {
+        if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:scheme]]){
+            schemeMessage = [NSString stringWithFormat:@"%@,%@", schemeMessage, scheme];
+            break;
+        }
+    }
+    return schemeMessage;
+}
+
+- (NSString *)checkPathsMessage
+{
+    NSString *existsPath = @"";
+    for (NSString *path in [self pathsToCheck]) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path]){
+            existsPath = [NSString stringWithFormat:@"%@,%@", existsPath, path];
+            break;
+        }
+    }
+    return existsPath;
+}
+
+
+- (NSString *)checkSymlinksMessage
+{
+    NSString *symLinkMessage = @"";
+    for (NSString *symlink in [self symlinksToCheck]) {
+        NSString* result = [[NSFileManager defaultManager] destinationOfSymbolicLinkAtPath:symlink error:nil];
+        if([result length] > 0) {
+            symLinkMessage = [NSString stringWithFormat:@"%@,%@", symLinkMessage, symlink];
+        }
+    }
+    return symLinkMessage;
+}
+
+- (NSString *)checkDylibsMessage
+{
+    NSString *imagePath = @"";
+    
+    for (int i=0; i < _dyld_image_count(); i++) {
+        imagePath = [NSString stringWithUTF8String:_dyld_get_image_name(i)];
+        
+        for (NSString *dylibPath in [self dylibsToCheck]) {
+            if([imagePath localizedCaseInsensitiveContainsString:dylibPath]) {
+                imagePath = [NSString stringWithFormat:@"%@,%@", imagePath, dylibPath];
+            }
+        }
+    }
+    return imagePath;
 }
 
 - (NSDictionary *)constantsToExport
 {
 	return @{
-			 JMisJailBronkenKey: @(self.isJailBroken),
-			 JMisDebuggedKey: @(self.isDebugged),
-			 JMCanMockLocationKey: @(self.isJailBroken)
-			 };
+		JMisJailBronkenKey: @(self.isJailBroken),
+		JMCanMockLocationKey: @(self.isJailBroken),
+        JMJailBrokenMessageKey : [self jailBrokenMessage]
+	};
 }
 
 @end
