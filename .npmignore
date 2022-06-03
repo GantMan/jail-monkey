@@ -1,2 +1,3 @@
 # Don't ship the example project
 ExampleProject/
+.github/
