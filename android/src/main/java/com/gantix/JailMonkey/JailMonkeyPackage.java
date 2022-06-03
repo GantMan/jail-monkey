@@ -1,7 +1,6 @@
 package com.gantix.JailMonkey;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,5 +39,4 @@ public class JailMonkeyPackage implements ReactPackage {
             ReactApplicationContext reactContext) {
         return Collections.emptyList();
     }
-
 }

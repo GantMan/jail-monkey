@@ -1,7 +1,6 @@
 package com.gantix.JailMonkey;
 
 import android.content.pm.ApplicationInfo;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Debug;
 import android.provider.Settings;
@@ -14,7 +13,6 @@ import com.facebook.react.bridge.ReactMethod;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.annotation.Nullable;
 
 import static com.gantix.JailMonkey.AdbEnabled.AdbEnabled.AdbEnabled;
@@ -25,22 +23,17 @@ import static com.gantix.JailMonkey.Rooted.RootedCheck.isJailBroken;
 
 
 public class JailMonkeyModule extends ReactContextBaseJavaModule {
-
     ReactApplicationContext reactContext;
-
 
     public JailMonkeyModule(ReactApplicationContext reactContext, boolean loadConstantsAsynchronously) {
         super(reactContext);
-
         this.reactContext = reactContext;
-
     }
 
     @Override
     public String getName() {
         return "JailMonkey";
     }
-
 
     @ReactMethod
     public void isDevelopmentSettingsMode(Promise p) {
@@ -53,7 +46,6 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
         p.resolve(isDevelopmentSettingsMode);
     }
 
-
     @ReactMethod
     public void isDebuggedMode(Promise p) {
         boolean isDebuggedMode;
@@ -64,7 +56,6 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
         }
         p.resolve(isDebuggedMode);
     }
-
 
     @Override
     public @Nullable

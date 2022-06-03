@@ -4,7 +4,6 @@ import android.content.Context;
 import android.provider.Settings;
 import android.os.Build;
 import android.util.Log;
-import com.facebook.react.bridge.ReactContext;
 import android.content.pm.PackageManager;
 
 import java.util.List;
@@ -12,9 +11,6 @@ import java.util.List;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.PackageInfo;
-import android.location.LocationManager;
-
-import java.lang.IllegalArgumentException;
 
 public class MockLocationCheck {
     public static boolean isMockLocationOn(Context context) {

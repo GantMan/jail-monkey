@@ -1,21 +1,58 @@
-apply plugin: 'com.android.library'
+buildscript {
+    if (project == rootProject) {
+        repositories {
+            google()
+            mavenCentral()
+        }
 
-android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
-
-    defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-    }
-    lintOptions {
-       warning 'InvalidPackage'
+        dependencies {
+            classpath 'com.android.tools.build:gradle:3.5.3'
+        }
     }
 }
 
+apply plugin: 'com.android.library'
+
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
+android {
+    compileSdkVersion safeExtGet('JailMonkey_compileSdkVersion', 29)
+    defaultConfig {
+        minSdkVersion safeExtGet('JailMonkey_minSdkVersion', 21)
+        targetSdkVersion safeExtGet('JailMonkey_targetSdkVersion', 29)
+        versionCode 1
+        versionName "1.0"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    lintOptions {
+        disable 'GradleCompatible'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+        url("$rootDir/../node_modules/react-native/android")
+    }
+    google()
+    mavenCentral()
+}
+
 dependencies {
-    implementation 'com.facebook.react:react-native:+'
-    implementation 'com.scottyab:rootbeer-lib:0.0.9'
+    //noinspection GradleDynamicVersion
+    implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation 'com.scottyab:rootbeer-lib:0.1.0'
 }

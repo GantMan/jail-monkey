@@ -1,9 +1,7 @@
 package com.gantix.JailMonkey.Rooted;
 
 import android.content.Context;
-
 import com.scottyab.rootbeer.RootBeer;
-import android.os.Build;
 
 public class RootedCheck {
 
@@ -25,7 +23,7 @@ public class RootedCheck {
 
     private static boolean rootBeerCheck(Context context) {
         RootBeer rootBeer = new RootBeer(context);
-        
+
         return rootBeer.isRootedWithoutBusyBoxCheck();
     }
 }
