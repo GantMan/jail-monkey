@@ -2,18 +2,10 @@ package com.gantix.JailMonkey.Rooted;
 
 import android.content.Context;
 import com.scottyab.rootbeer.RootBeer;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RootedCheck {
-
-    /**
-     * Checks if the device is rooted.
-     *
-     * @return <code>true</code> if the device is rooted, <code>false</code> otherwise.
-     */
-    public static boolean isJailBroken(Context context) {
-        return new RootedCheck(context).isJailBroken();
-    }
-
     private static boolean checkWithJailMonkeyMethod() {
         CheckApiVersion check;
 
@@ -35,6 +27,15 @@ public class RootedCheck {
 
     public boolean isJailBroken() {
         return jailMonkeyResult || rootBeerResults.isJailBroken();
+    }
+
+    public Map<String, Object> getResultByDetectionMethod() {
+        final Map<String, Object> map = new HashMap<>();
+
+        map.put("jailMonkey", jailMonkeyResult);
+        map.put("rootBeer", rootBeerResults.toNativeMap());
+
+        return map;
     }
 
     private static class RootBeerResults {
@@ -67,6 +68,22 @@ public class RootedCheck {
             return detectRootManagementApps || detectPotentiallyDangerousApps || checkForSuBinary
                     || checkForDangerousProps || checkForRWPaths
                     || detectTestKeys || checkSuExists || checkForRootNative || checkForMagiskBinary;
+        }
+
+        public Map<String, Object> toNativeMap() {
+            final Map<String, Object> map = new HashMap<>();
+
+            map.put("detectRootManagementApps", detectRootManagementApps);
+            map.put("detectPotentiallyDangerousApps", detectPotentiallyDangerousApps);
+            map.put("checkForSuBinary", checkForSuBinary);
+            map.put("checkForDangerousProps", checkForDangerousProps);
+            map.put("checkForRWPaths", checkForRWPaths);
+            map.put("detectTestKeys", detectTestKeys);
+            map.put("checkSuExists", checkSuExists);
+            map.put("checkForRootNative", checkForRootNative);
+            map.put("checkForMagiskBinary", checkForMagiskBinary);
+
+            return map;
         }
     }
 }

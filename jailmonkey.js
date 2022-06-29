@@ -7,6 +7,7 @@ if (JailMonkey == null) console.warn("JailMonkey is not available, check your na
 export default {
   jailBrokenMessage: () => JailMonkey.jailBrokenMessage || "",
   isJailBroken: () => JailMonkey.isJailBroken || false,
+  androidRootedDetectionMethods: JailMonkey.rootedDetectionMethods,
   hookDetected: () => JailMonkey.hookDetected || false,
   canMockLocation: () => JailMonkey.canMockLocation || false,
   trustFall: () =>
