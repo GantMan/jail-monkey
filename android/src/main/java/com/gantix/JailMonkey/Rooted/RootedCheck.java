@@ -11,7 +11,7 @@ public class RootedCheck {
      * @return <code>true</code> if the device is rooted, <code>false</code> otherwise.
      */
     public static boolean isJailBroken(Context context) {
-        return checkWithJailMonkeyMethod() || rootBeerCheck(context);
+        return new RootedCheck(context).isJailBroken();
     }
 
     private static boolean checkWithJailMonkeyMethod() {
@@ -25,8 +25,16 @@ public class RootedCheck {
         return check.checkRooted();
     }
 
-    private static boolean rootBeerCheck(Context context) {
-        return new RootBeerResults(context).isJailBroken();
+    private final boolean jailMonkeyResult;
+    private final RootBeerResults rootBeerResults;
+
+    public RootedCheck(Context context) {
+        jailMonkeyResult = checkWithJailMonkeyMethod();
+        rootBeerResults = new RootBeerResults(context);
+    }
+
+    public boolean isJailBroken() {
+        return jailMonkeyResult || rootBeerResults.isJailBroken();
     }
 
     private static class RootBeerResults {
