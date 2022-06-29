@@ -1,6 +1,5 @@
 package com.gantix.JailMonkey.Rooted;
 
-import static com.scottyab.rootbeer.Const.BINARY_SU;
 import android.content.Context;
 import com.scottyab.rootbeer.RootBeer;
 
@@ -27,10 +26,39 @@ public class RootedCheck {
     }
 
     private static boolean rootBeerCheck(Context context) {
-        RootBeer rootBeer = new RootBeer(context);
+        return new RootBeerResults(context).isJailBroken();
+    }
 
-        return rootBeer.detectRootManagementApps() || rootBeer.detectPotentiallyDangerousApps() || rootBeer.checkForBinary(BINARY_SU)
-                || rootBeer.checkForDangerousProps() || rootBeer.checkForRWPaths()
-                || rootBeer.detectTestKeys() || rootBeer.checkSuExists() || rootBeer.checkForRootNative() || rootBeer.checkForMagiskBinary();
+    private static class RootBeerResults {
+        private final boolean detectRootManagementApps;
+        private final boolean detectPotentiallyDangerousApps;
+        private final boolean checkForSuBinary;
+        private final boolean checkForDangerousProps;
+        private final boolean checkForRWPaths;
+        private final boolean detectTestKeys;
+        private final boolean checkSuExists;
+        private final boolean checkForRootNative;
+        private final boolean checkForMagiskBinary;
+
+        RootBeerResults(Context context) {
+            final RootBeer rootBeer = new RootBeer(context);
+            rootBeer.setLogging(false);
+
+            detectRootManagementApps = rootBeer.detectRootManagementApps();
+            detectPotentiallyDangerousApps = rootBeer.detectPotentiallyDangerousApps();
+            checkForSuBinary = rootBeer.checkForSuBinary();
+            checkForDangerousProps = rootBeer.checkForDangerousProps();
+            checkForRWPaths = rootBeer.checkForRWPaths();
+            detectTestKeys = rootBeer.detectTestKeys();
+            checkSuExists = rootBeer.checkSuExists();
+            checkForRootNative = rootBeer.checkForRootNative();
+            checkForMagiskBinary = rootBeer.checkForMagiskBinary();
+        }
+
+        public boolean isJailBroken() {
+            return detectRootManagementApps || detectPotentiallyDangerousApps || checkForSuBinary
+                    || checkForDangerousProps || checkForRWPaths
+                    || detectTestKeys || checkSuExists || checkForRootNative || checkForMagiskBinary;
+        }
     }
 }
