@@ -13,6 +13,10 @@ public class RootedCheck {
      * @return <code>true</code> if the device is rooted, <code>false</code> otherwise.
      */
     public static boolean isJailBroken(Context context) {
+        return checkWithJailMonkeyMethod() || rootBeerCheck(context);
+    }
+
+    private static boolean checkWithJailMonkeyMethod() {
         CheckApiVersion check;
 
         if (android.os.Build.VERSION.SDK_INT >= 23) {
@@ -20,12 +24,12 @@ public class RootedCheck {
         } else {
             check = new LessThan23();
         }
-        return check.checkRooted() || rootBeerCheck(context);
+        return check.checkRooted();
     }
 
     private static boolean rootBeerCheck(Context context) {
         RootBeer rootBeer = new RootBeer(context);
-        
+
         return rootBeer.isRootedWithoutBusyBoxCheck();
     }
 }
