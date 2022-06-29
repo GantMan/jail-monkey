@@ -1,9 +1,8 @@
 package com.gantix.JailMonkey.Rooted;
 
+import static com.scottyab.rootbeer.Const.BINARY_SU;
 import android.content.Context;
-
 import com.scottyab.rootbeer.RootBeer;
-import android.os.Build;
 
 public class RootedCheck {
 
@@ -30,6 +29,8 @@ public class RootedCheck {
     private static boolean rootBeerCheck(Context context) {
         RootBeer rootBeer = new RootBeer(context);
 
-        return rootBeer.isRootedWithoutBusyBoxCheck();
+        return rootBeer.detectRootManagementApps() || rootBeer.detectPotentiallyDangerousApps() || rootBeer.checkForBinary(BINARY_SU)
+                || rootBeer.checkForDangerousProps() || rootBeer.checkForRWPaths()
+                || rootBeer.detectTestKeys() || rootBeer.checkSuExists() || rootBeer.checkForRootNative() || rootBeer.checkForMagiskBinary();
     }
 }
