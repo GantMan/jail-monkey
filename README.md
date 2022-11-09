@@ -57,6 +57,10 @@ On iOS all of the Android only methods will return `false` or `Promise<false>` w
 npm i jail-monkey --save
 react-native link # Not required as of React Native 0.60.0
 ```
+for iOS:
+```bash
+cd ios && pod install
+```
 
 If you use `rnpm`, you may have trouble as `rnpm` does not link Android properly after 0.29.0!
 
