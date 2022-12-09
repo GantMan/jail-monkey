@@ -4,6 +4,20 @@
 declare const _default: {
   jailBrokenMessage : () => string,
   isJailBroken: () => boolean;
+  androidRootedDetectionMethods?: {
+    rootBeer: {
+      detectRootManagementApps: boolean;
+      detectPotentiallyDangerousApps: boolean;
+      checkForSuBinary: boolean;
+      checkForDangerousProps: boolean;
+      checkForRWPaths: boolean;
+      detectTestKeys: boolean;
+      checkSuExists: boolean;
+      checkForRootNative: boolean;
+      checkForMagiskBinary: boolean;
+    },
+    jailMonkey: boolean;
+  };
   hookDetected: () => boolean;
   isDebuggedMode: () => Promise<boolean>;
   canMockLocation: () => boolean;

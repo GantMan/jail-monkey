@@ -11,6 +11,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.gantix.JailMonkey.Rooted.RootedCheck;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,8 +22,6 @@ import static com.gantix.JailMonkey.AdbEnabled.AdbEnabled.AdbEnabled;
 import static com.gantix.JailMonkey.ExternalStorage.ExternalStorageCheck.isOnExternalStorage;
 import static com.gantix.JailMonkey.HookDetection.HookDetectionCheck.hookDetected;
 import static com.gantix.JailMonkey.MockLocation.MockLocationCheck.isMockLocationOn;
-import static com.gantix.JailMonkey.Rooted.RootedCheck.isJailBroken;
-
 
 public class JailMonkeyModule extends ReactContextBaseJavaModule {
 
@@ -70,8 +69,12 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
     public @Nullable
     Map<String, Object> getConstants() {
         ReactContext context = getReactApplicationContext();
+        final RootedCheck rootedCheck = new RootedCheck(context);
+
         final Map<String, Object> constants = new HashMap<>();
-        constants.put("isJailBroken", isJailBroken(context));
+
+        constants.put("isJailBroken", rootedCheck.isJailBroken());
+        constants.put("rootedDetectionMethods", rootedCheck.getResultByDetectionMethod());
         constants.put("hookDetected", hookDetected(context));
         constants.put("canMockLocation", isMockLocationOn(context));
         constants.put("isOnExternalStorage", isOnExternalStorage(context));
