@@ -46,6 +46,24 @@ Method | Returns | Description
 `isOnExternalStorage` | `boolean` | Is the application running on external storage (ie. SD Card)
 `AdbEnabled` | `boolean` | Is Android Debug Bridge enabled.
 `isDevelopmentSettingsMode` | `Promise<boolean>` | Whether user has enabled development settings on their device. Note that this method returns a Promise.
+`androidRootedDetectionMethods` | `RootedDetectionMethods` | Returns an object with the results of all the Android rooted detection methods for more granular detection, this can be helpful if some devices are giving false positives.
+
+```
+type RootedDetectionMethods = {
+  rootBeer: {
+    detectRootManagementApps: boolean;
+    detectPotentiallyDangerousApps: boolean;
+    checkForSuBinary: boolean;
+    checkForDangerousProps: boolean;
+    checkForRWPaths: boolean;
+    detectTestKeys: boolean;
+    checkSuExists: boolean;
+    checkForRootNative: boolean;
+    checkForMagiskBinary: boolean;
+  },
+  jailMonkey: boolean;
+}
+```
 
 On iOS all of the Android only methods will return `false` or `Promise<false>` where appropriate.
 
