@@ -20,6 +20,9 @@ public class HookDetectionCheck {
         PackageManager packageManager = context.getPackageManager();
         List<ApplicationInfo> applicationInfoList = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
         String[] dangerousPackages = {
+                "de.robv.android.xposed.installer", 
+                "com.saurik.substrate", 
+                "de.robv.android.xposed"
                 "com.noshufou.android.su.elite",
                 "eu.chainfire.supersu",
                 "com.koushikdutta.superuser",
