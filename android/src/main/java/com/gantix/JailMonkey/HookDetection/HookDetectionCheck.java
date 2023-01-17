@@ -19,7 +19,33 @@ public class HookDetectionCheck {
     public static boolean hookDetected(Context context) {
         PackageManager packageManager = context.getPackageManager();
         List<ApplicationInfo> applicationInfoList = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
-        String[] dangerousPackages = {"de.robv.android.xposed.installer", "com.saurik.substrate", "de.robv.android.xposed"};
+        String[] dangerousPackages = {
+                "de.robv.android.xposed.installer", 
+                "com.saurik.substrate", 
+                "de.robv.android.xposed"
+                "com.noshufou.android.su.elite",
+                "eu.chainfire.supersu",
+                "com.koushikdutta.superuser",
+                "com.thirdparty.superuser",
+                "com.yellowes.su",
+                "com.koushikdutta.rommanager",
+                "com.koushikdutta.rommanager.license",
+                "com.dimonvideo.luckypatcher",
+                "com.chelpus.lackypatch",
+                "com.ramdroid.appquarantine",
+                "com.ramdroid.appquarantinepro",
+                "de.robv.android.xposed.installer",
+                "com.saurik.substrate",
+                "com.zachspong.temprootremovejb",
+                "com.amphoras.hidemyroot",
+                "com.amphoras.hidemyrootadfree",
+                "com.formyhm.hiderootPremium",
+                "com.formyhm.hideroot",
+                "me.phh.superuser",
+                "eu.chainfire.supersu.pro",
+                "com.kingouser.com",
+                "com.topjohnwu.magisk"
+                };
 
         if (applicationInfoList != null) {
             for (ApplicationInfo applicationInfo : applicationInfoList) {
