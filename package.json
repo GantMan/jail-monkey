@@ -33,7 +33,7 @@
   },
   "description": "A React Native module for identifying jail-broken, rooted, or mock locations on iOS and Android",
   "devDependencies": {
-    "np": "^7.5.0"
+    "np": "^9.2.0"
   },
   "homepage": "https://github.com/GantMan/jail-monkey#readme",
   "keywords": [
