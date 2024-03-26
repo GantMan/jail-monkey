@@ -98,7 +98,8 @@ RCT_EXPORT_MODULE();
             @"/var/lib/apt",
             @"/var/lib/cydia",
             @"/var/lib/dpkg/info/mobilesubstrate.md5sums",
-            @"/var/log/apt"
+            @"/var/log/apt",
+	    @"/var/mobile/Library/Preferences/me.jjolano.shadow.plist"
             ];
 }
 
