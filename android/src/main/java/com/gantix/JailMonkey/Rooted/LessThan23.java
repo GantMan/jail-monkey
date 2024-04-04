@@ -13,7 +13,7 @@ public class LessThan23 implements CheckApiVersion {
         boolean executeResult;
         try {
             Process process = Runtime.getRuntime().exec(command);
-            if(process.waitFor() == 0) {
+            if (process.waitFor() == 0) {
                 executeResult = true;
             } else {
                 executeResult = false;

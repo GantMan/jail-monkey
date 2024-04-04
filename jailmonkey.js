@@ -1,23 +1,29 @@
 import { NativeModules, Platform } from "react-native";
 
-const { JailMonkey } = NativeModules;
+const message = "JailMonkey native module is not available, check your native dependencies have linked correctly and ensure your app has been rebuilt";
 
-if (JailMonkey == null) console.warn("JailMonkey is not available, check your native dependencies have linked correctly and ensure your app has been rebuilt");
+if (NativeModules.JailMonkey == null) console.warn(message);
+
+function getJailMonkey() {
+  const { JailMonkey } = NativeModules;
+  if (JailMonkey == null) throw new Error(message)
+  return JailMonkey;
+}
 
 export default {
-  jailBrokenMessage: () => JailMonkey.jailBrokenMessage || "",
-  isJailBroken: () => JailMonkey.isJailBroken || false,
-  androidRootedDetectionMethods: JailMonkey.rootedDetectionMethods,
-  hookDetected: () => JailMonkey.hookDetected || false,
-  canMockLocation: () => JailMonkey.canMockLocation || false,
+  jailBrokenMessage: () => getJailMonkey().jailBrokenMessage || "",
+  isJailBroken: () => getJailMonkey().isJailBroken || false,
+  androidRootedDetectionMethods: NativeModules.JailMonkey?.rootedDetectionMethods ?? {},
+  hookDetected: () => getJailMonkey().hookDetected || false,
+  canMockLocation: () => getJailMonkey().canMockLocation || false,
   trustFall: () =>
-    JailMonkey.isJailBroken || JailMonkey.canMockLocation || false,
-  isOnExternalStorage: () => JailMonkey.isOnExternalStorage || false,
-  isDebuggedMode: () => JailMonkey.isDebuggedMode(),
+    getJailMonkey().isJailBroken || getJailMonkey().canMockLocation || false,
+  isOnExternalStorage: () => getJailMonkey().isOnExternalStorage || false,
+  isDebuggedMode: () => getJailMonkey().isDebuggedMode(),
   isDevelopmentSettingsMode: () => {
     // API only available on Android, return false for all other platforms.
     if (Platform.OS !== "android") return Promise.resolve(false);
-    return JailMonkey.isDevelopmentSettingsMode();
+    return getJailMonkey().isDevelopmentSettingsMode();
   },
-  AdbEnabled: () => JailMonkey.AdbEnabled || false,
+  AdbEnabled: () => getJailMonkey().AdbEnabled || false,
 };
