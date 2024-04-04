@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.homepage = package['homepage']
   s.license = package['license']
   s.author = package['author']
-  s.source = { :git => 'https://github.com/GantMan/jail-monkey.git' }
+  s.source = { :git => 'https://github.com/GantMan/jail-monkey.git', :tag => "v#{s.version.to_s}" }
 
   s.platform = :ios, '7.0'
   s.ios.deployment_target = '7.0'
