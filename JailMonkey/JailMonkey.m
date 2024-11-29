@@ -155,6 +155,7 @@ RCT_EXPORT_MODULE();
             @"TweakInject.dylib",
             @"WeeLoader",
             @"cyinject",
+            @"systemhook.dylib", // Dopamine - hide jailbreak detection https://github.com/opa334/Dopamine/blob/dc1a1a3486bb5d74b8f2ea6ada782acdc2f34d0a/Application/Dopamine/Jailbreak/DOEnvironmentManager.m#L498
             @"libcycript",
             @"libhooker",
             @"libsparkapplist.dylib",
