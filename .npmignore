@@ -1,3 +1,4 @@
 # Don't ship the example project
 ExampleProject/
 .github/
+CHANGELOG.md
