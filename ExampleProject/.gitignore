@@ -64,3 +64,12 @@ yarn-error.log
 
 # testing
 /coverage
+
+# Ignore yarn files.
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*

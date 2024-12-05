@@ -18,29 +18,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v2
+      - name: Enable Corepack
+        run: corepack enable
+
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20.x'
+          cache: 'yarn'
 
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - uses: c-hive/gha-yarn-cache@v1
-      - name: Yarn
-        run: cd ExampleProject && yarn install
+      - name: Yarn Install on root
+        run: yarn install
+
+      - name: Yarn Install Example Project
+        run: yarn install:example-project
 
       - name: Cache Gradle Wrapper
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
 
       - name: Cache Gradle Dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
