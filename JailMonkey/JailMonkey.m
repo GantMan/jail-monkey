@@ -75,7 +75,7 @@ RCT_EXPORT_MODULE();
             @"/private/var/mobile/Library/SBSettings/Themes",
             @"/private/var/stash",
             @"/private/var/tmp/cydia.log",
-	    @"/var/tmp/cydia.log",
+	        @"/var/tmp/cydia.log",
             @"/usr/bin/cycript",
             @"/usr/bin/sshd",
             @"/usr/lib/libcycript.dylib",
@@ -98,7 +98,9 @@ RCT_EXPORT_MODULE();
             @"/var/lib/apt",
             @"/var/lib/cydia",
             @"/var/lib/dpkg/info/mobilesubstrate.md5sums",
-            @"/var/log/apt"
+            @"/var/log/apt",
+            @"/var/mobile/Library/Preferences/me.jjolano.shadow.plist"
+            @"/var/mobile/Library/Preferences/ABPattern"
             ];
 }
 
@@ -136,6 +138,7 @@ RCT_EXPORT_MODULE();
             @"/usr/lib/Cephei.framework/Cephei",
             @"0Shadow.dylib",
             @"ABypass",
+            @"AppSyncUnified-FrontBoard.dylib",
             @"Cephei",
             @"CustomWidgetIcons",
             @"CydiaSubstrate",
@@ -145,6 +148,7 @@ RCT_EXPORT_MODULE();
             @"MobileSubstrate.dylib",
             @"PreferenceLoader",
             @"RocketBootstrap",
+            @"Shadow",
             @"SSLKillSwitch.dylib",
             @"SSLKillSwitch2.dylib",
             @"Substitute",
@@ -155,6 +159,8 @@ RCT_EXPORT_MODULE();
             @"TweakInject.dylib",
             @"WeeLoader",
             @"cyinject",
+            @"cynject",
+            @"frida",
             @"systemhook.dylib", // Dopamine - hide jailbreak detection https://github.com/opa334/Dopamine/blob/dc1a1a3486bb5d74b8f2ea6ada782acdc2f34d0a/Application/Dopamine/Jailbreak/DOEnvironmentManager.m#L498
             @"libcycript",
             @"libhooker",
