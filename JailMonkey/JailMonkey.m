@@ -112,7 +112,12 @@ RCT_EXPORT_MODULE();
             @"filza://package/com.example.package",
             @"sileo://package/com.example.package",
             @"undecimus://package/com.example.package",
-            @"zbra://package/com.example.package"
+            @"zbra://package/com.example.package",
+            @"anygofree://package/com.example.package", // AnyGo Location spooofer
+            @"xgpspro://package/com.example.package", // Fake GPS Pro Location Spoofer
+            @"acc.GpsManager://package/com.example.package", // GPS Manger Location Spoofer
+            @"LocationSimulation://package/com.example.package", // LocSim Location Spoofer
+            @"locationfakelocation://package/com.example.package" // LocSim Location Spoofer Alternative Scheme
             ];
 }
 
