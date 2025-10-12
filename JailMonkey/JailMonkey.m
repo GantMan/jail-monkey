@@ -100,7 +100,8 @@ RCT_EXPORT_MODULE();
             @"/var/lib/dpkg/info/mobilesubstrate.md5sums",
             @"/var/log/apt",
             @"/var/mobile/Library/Preferences/me.jjolano.shadow.plist",
-            @"/var/mobile/Library/Preferences/ABPattern"
+            @"/var/mobile/Library/Preferences/ABPattern",
+            @"/var/mobile/Library/Preferences/com.opa334.Dopamine-roothide.plist"
             ];
 }
 
