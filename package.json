@@ -48,7 +48,7 @@
     "Detect"
   ],
   "license": "MIT",
-  "main": "jailmonkey.js",
+  "main": "index.tsx",
   "name": "jail-monkey",
   "repository": {
     "type": "git",
@@ -63,5 +63,13 @@
   },
   "typings": "./jailmonkey.d.ts",
   "version": "2.8.4",
+  "codegenConfig": {
+    "name": "NativeJailMonkey",
+    "type": "modules",
+    "jsSrcsDir": "specs",
+    "android": {
+      "javaPackageName": "com.gantix.JailMonkey"
+    }
+  },
   "packageManager": "yarn@1.22.22"
 }
