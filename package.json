@@ -58,7 +58,6 @@
     "shipit": "np",
     "test": "echo Not yet",
     "install-example": "cd ExampleProject && yarn install",
-    "flow-check": "npx flow check-contents < jailmonkey.js.flow",
     "ts-check": "npx tsc jailmonkey.d.ts --noEmit"
   },
   "typings": "./jailmonkey.d.ts",
