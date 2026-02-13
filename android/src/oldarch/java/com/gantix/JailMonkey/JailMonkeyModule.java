@@ -12,11 +12,11 @@ import javax.annotation.Nullable;
 
 public class JailMonkeyModule extends ReactContextBaseJavaModule {
 
-    private final JailMonkeyImpl impl;
+    private final JailMonkeyModuleImpl impl;
 
     public JailMonkeyModule(ReactApplicationContext reactContext) {
         super(reactContext);
-        impl = new JailMonkeyImpl(reactContext); // context impl içinde set ediliyor
+        impl = new JailMonkeyModuleImpl(reactContext);
     }
 
     @Override
@@ -24,7 +24,6 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
         return "JailMonkey";
     }
 
-    // ===== ASYNC METHODS =====
     @ReactMethod
     public void isDevelopmentSettingsMode(Promise p) {
         impl.isDevelopmentSettingsMode(p);
@@ -35,7 +34,7 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
         impl.isDebuggedMode(p);
     }
 
-    // ===== SYNC / CONSTANTS =====
+    @ReactMethod
     @Override
     public @Nullable Map<String, Object> getConstants() {
         Map<String, Object> constants = new HashMap<>();
@@ -45,6 +44,7 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
         constants.put("canMockLocation", impl.canMockLocation());
         constants.put("isOnExternalStorage", impl.isOnExternalStorage());
         constants.put("AdbEnabled", impl.isAdbEnabled());
+        constants.put("rootedDetectionMethods", rootedCheck.getResultByDetectionMethod());
 
         return constants;
     }

@@ -64,7 +64,7 @@ public class JailMonkeyModuleImpl {
     }
 
     public static boolean trustFall() {
-        return false;
+        return isJailBroken() || canMockLocation();
     }
 
      public static boolean isAdbEnabled() {
@@ -74,7 +74,7 @@ public class JailMonkeyModuleImpl {
 
     public static boolean isOnExternalStorage() {
         if (context == null) return false;
-        return isOnExternalStorage();
+        return com.gantix.JailMonkey.ExternalStorage.ExternalStorageCheck.isOnExternalStorage();
     }
 
     

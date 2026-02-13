@@ -1,4 +1,5 @@
 require "json"
+
 package = JSON.parse(File.read(File.join(__dir__, '/package.json')))
 
 Pod::Spec.new do |s|
@@ -15,11 +16,16 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '7.0'
 
   s.source_files = "JailMonkey/**/*.{h,m,mm}"
+
   s.dependency "React-Core"
-  s.dependency "React-RCTFabric"
-  s.dependency "React-Codegen"
-  s.dependency "RCTRequired"
-  s.dependency "RCTTypeSafety"
-  s.dependency "ReactCommon/turbomodule/core"
-  install_modules_dependencies(s)
+
+  if ENV['RCT_NEW_ARCH_ENABLED'] == '1'
+    s.dependency "React-RCTFabric"
+    s.dependency "React-Codegen"
+    s.dependency "RCTRequired"
+    s.dependency "RCTTypeSafety"
+    s.dependency "ReactCommon/turbomodule/core"
+
+    install_modules_dependencies(s)
+  end
 end
