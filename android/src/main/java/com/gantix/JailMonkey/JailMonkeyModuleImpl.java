@@ -5,11 +5,13 @@ import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Debug;
 import android.provider.Settings;
-import com.facebook.react.bridge.Promise;
-import java.util.Map;
-import com.facebook.react.bridge.ReactMethod;
-import java.util.HashMap;
 import androidx.annotation.Nullable;
+import java.util.Map;
+import java.util.HashMap;
+import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.Arguments;
 
 import com.gantix.JailMonkey.Rooted.RootedCheck;
 
@@ -92,7 +94,7 @@ public class JailMonkeyModuleImpl {
     }
 
     public static WritableMap rootedDetectionMethods() {
-        RootedCheck rootedCheck = new RootedCheck(contenxt);
+        RootedCheck rootedCheck = new RootedCheck(context);
         Map<String, Object> result = rootedCheck.getResultByDetectionMethod();
 
         WritableMap map = Arguments.createMap();

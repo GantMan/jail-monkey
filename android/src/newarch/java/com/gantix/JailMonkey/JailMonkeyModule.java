@@ -5,6 +5,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import java.util.Map;
 import com.facebook.react.bridge.ReactMethod;
 import androidx.annotation.Nullable;
+import com.facebook.react.bridge.WritableMap;
 
 /**
  * New Architecture TurboModule implementation.
