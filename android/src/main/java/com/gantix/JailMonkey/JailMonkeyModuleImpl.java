@@ -74,10 +74,9 @@ public class JailMonkeyModuleImpl {
 
     public static boolean isOnExternalStorage() {
         if (context == null) return false;
-        return com.gantix.JailMonkey.ExternalStorage.ExternalStorageCheck.isOnExternalStorage();
+        return com.gantix.JailMonkey.ExternalStorage.ExternalStorageCheck.isOnExternalStorage(context);
     }
 
-    
     public static String jailBrokenMessage() {
         return "null";
     }

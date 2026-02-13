@@ -11,6 +11,7 @@ export interface Spec extends TurboModule {
   AdbEnabled(): boolean;
   isDebuggedMode(): Promise<boolean>;
   isDevelopmentSettingsMode(): Promise<boolean>;
+  rootedDetectionMethods?: () => Record<string, boolean>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>(

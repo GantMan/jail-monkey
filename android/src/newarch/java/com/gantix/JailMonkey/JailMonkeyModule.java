@@ -50,7 +50,6 @@ public class JailMonkeyModule extends NativeJailMonkeySpec {
         return JailMonkeyModuleImpl.trustFall();
     }
 
-    @Override
     public Map<String,Object> rootedDetectionMethods() {
         return JailMonkeyModuleImpl.rootedDetectionMethods();
     }
