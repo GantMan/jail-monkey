@@ -91,9 +91,17 @@ public class JailMonkeyModuleImpl {
         return com.gantix.JailMonkey.HookDetection.HookDetectionCheck.hookDetected(context);
     }
 
-    public static Map<String,Object> rootedDetectionMethods() {
-        RootedCheck rootedCheck = new RootedCheck(context);
-        return rootedCheck.getResultByDetectionMethod();
+    public static WritableMap rootedDetectionMethods() {
+        RootedCheck rootedCheck = new RootedCheck(contenxt);
+        Map<String, Object> result = rootedCheck.getResultByDetectionMethod();
+
+        WritableMap map = Arguments.createMap();
+
+        for (Map.Entry<String, Object> entry : result.entrySet()) {
+            map.putBoolean(entry.getKey(), (Boolean) entry.getValue());
+        }
+
+        return map;
     }
 
     public static boolean isJailBroken() {
