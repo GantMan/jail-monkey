@@ -317,6 +317,18 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
       return YES;
     #endif
 
+    if (@available(iOS 15.0, *)) {
+        CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+        CLLocation *location = locationManager.location;
+
+        if (location.sourceInformation != nil) {
+            if (location.sourceInformation.isSimulatedBySoftware ||
+                location.sourceInformation.isProducedByAccessory) {
+                return YES;
+            }
+        }
+    }
+
     return [self isJailBroken];
 }
 
