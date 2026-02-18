@@ -39,7 +39,11 @@ public class MockLocationCheck {
                                 if (requestedPermissions[i]
                                         .equals("android.permission.ACCESS_MOCK_LOCATION")
                                         && !applicationInfo.packageName.equals(context.getPackageName())) {
-                                    return true;
+                                    int flag = packageInfo.requestedPermissionsFlags[i];
+                                    boolean granted = (flag & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0;
+                                    if (granted) {
+                                        return true;
+                                    }
                                 }
                             }
                         }
