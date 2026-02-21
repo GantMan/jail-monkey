@@ -1,6 +1,7 @@
 package com.gantix.JailMonkey.MockLocation;
 
 import android.content.Context;
+import java.util.Arrays;
 import android.provider.Settings;
 import android.os.Build;
 import android.util.Log;
@@ -21,6 +22,11 @@ public class MockLocationCheck {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return "0".equals(Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION));
         } else {
+            List<String> ignorePackages = Arrays.asList(
+                context.getPackageName(),
+                "com.android.calendar",
+                "com.google.android.calendar"
+            );
             PackageManager pm = context.getPackageManager();
             List<ApplicationInfo> packages =
                     pm.getInstalledApplications(PackageManager.GET_META_DATA);
@@ -38,8 +44,12 @@ public class MockLocationCheck {
                             for (int i = 0; i < requestedPermissions.length; i++) {
                                 if (requestedPermissions[i]
                                         .equals("android.permission.ACCESS_MOCK_LOCATION")
-                                        && !applicationInfo.packageName.equals(context.getPackageName())) {
-                                    return true;
+                                        && !ignorePackages.contains(applicationInfo.packageName)) {
+                                    int flag = packageInfo.requestedPermissionsFlags[i];
+                                    boolean granted = (flag & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0;
+                                    if (granted) {
+                                        return true;
+                                    }
                                 }
                             }
                         }
