@@ -2,6 +2,10 @@
 
 [![Version](https://img.shields.io/npm/v/jail-monkey.svg)](https://www.npmjs.com/package/jail-monkey) [![Downloads](https://img.shields.io/npm/dm/jail-monkey.svg)](https://npmcharts.com/compare/jail-monkey?minimal=true)
 
+> [!IMPORTANT]
+> - New Architecture support added in 3.0.0 with backward compatibility!
+> - For the Old Architecture (Bridge), the latest version is 2.8.5.
+
 ## Can you ever really trust a phone?
 
 # Why?
