@@ -97,7 +97,7 @@ public class HookDetectionCheck {
 
         if (runningServices != null) {
             for (int i = 0; i < runningServices.size(); ++i) {
-                if (runningServices.get(i).process.contains("fridaserver")) {
+                if (runningServices.get(i).process.contains("fridaserver") || runningServices.get(i).process.contains("frida-server")) {
                     return true;
                 }
             }

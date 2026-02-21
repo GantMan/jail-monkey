@@ -33,7 +33,7 @@
   },
   "description": "A React Native module for identifying jail-broken, rooted, or mock locations on iOS and Android",
   "devDependencies": {
-    "np": "^9.2.0"
+    "np": "^10.1.0"
   },
   "homepage": "https://github.com/GantMan/jail-monkey#readme",
   "keywords": [
@@ -57,9 +57,11 @@
   "scripts": {
     "shipit": "np",
     "test": "echo Not yet",
+    "install-example": "cd ExampleProject && yarn install",
     "flow-check": "npx flow check-contents < jailmonkey.js.flow",
     "ts-check": "npx tsc jailmonkey.d.ts --noEmit"
   },
   "typings": "./jailmonkey.d.ts",
-  "version": "2.8.1"
+  "version": "2.8.5",
+  "packageManager": "yarn@1.22.22"
 }
