@@ -7,9 +7,15 @@
 //
 #import <mach-o/dyld.h>
 #import "JailMonkey.h"
+#ifdef RCT_NEW_ARCH_ENABLED
+
+#import "NativeJailMonkeyJSI.h"
+#import <NativeJailMonkey/NativeJailMonkey.h>
+
+#endif
 #include <TargetConditionals.h>
-@import UIKit;
-@import Darwin.sys.sysctl;
+#import <UIKit/UIKit.h>
+#import <sys/sysctl.h>
 
 static NSString * const JMJailbreakTextFile = @"/private/jailbreak.txt";
 static NSString * const JMisJailBronkenKey = @"isJailBroken";
@@ -286,7 +292,7 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
     rejecter:(RCTPromiseRejectBlock) __unused reject) {
-    BOOL *isDebuggedModeActived = [self isDebugged];
+    BOOL isDebuggedModeActived = [self isDebugged];
     resolve(isDebuggedModeActived ? @YES : @NO);
 }
 
@@ -424,5 +430,12 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
         JMJailBrokenMessageKey : [self jailBrokenMessage]
 	};
 }
+
+#ifdef RCT_NEW_ARCH_ENABLED
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:(const facebook::react::ObjCTurboModule::InitParams &)params
+{
+    return std::make_shared<facebook::react::NativeJailMonkeySpecJSI>(params);
+}
+#endif
 
 @end
