@@ -4,41 +4,48 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import androidx.annotation.Nullable;
 
-import com.facebook.react.ReactPackage;
-import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.module.model.ReactModuleInfo;
+import com.facebook.react.module.model.ReactModuleInfoProvider;
+import com.facebook.react.TurboReactPackage;
 import com.facebook.react.uimanager.ViewManager;
+import com.facebook.react.ReactPackage;
+import com.facebook.react.bridge.JavaScriptModule;
 
-public class JailMonkeyPackage implements ReactPackage {
-
-    private boolean mLoadConstantsAsynchronously;
-
-    public JailMonkeyPackage() {
-        this(false);
-    }
-
-    public JailMonkeyPackage(boolean loadConstantsAsynchronously) {
-        mLoadConstantsAsynchronously = loadConstantsAsynchronously;
+public class JailMonkeyPackage extends TurboReactPackage {
+    @Nullable
+    @Override
+    public NativeModule getModule(String name, ReactApplicationContext reactContext) {
+        if (name.equals(JailMonkeyModuleImpl.NAME)) {
+            return new JailMonkeyModule(reactContext);
+        } else {
+            return null;
+        }
     }
 
     @Override
-    public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-        List<NativeModule> modules = new ArrayList<>();
-        modules.add(new JailMonkeyModule(reactContext, mLoadConstantsAsynchronously));
-        return modules;
-    }
-
-    // Deprecated RN 0.47
-    public List<Class<? extends JavaScriptModule>> createJSModules() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<ViewManager> createViewManagers(
-            ReactApplicationContext reactContext) {
-        return Collections.emptyList();
+    public ReactModuleInfoProvider getReactModuleInfoProvider() {
+        return () -> {
+            final Map<String, ReactModuleInfo> moduleInfos = new HashMap<>();
+            boolean isTurboModule = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+            moduleInfos.put(
+                    JailMonkeyModuleImpl.NAME,
+                    new ReactModuleInfo(
+                            JailMonkeyModuleImpl.NAME,
+                            JailMonkeyModuleImpl.NAME,
+                            false, // canOverrideExistingModule
+                            false, // needsEagerInit
+                            true, // hasConstants
+                            false, // isCxxModule
+                            isTurboModule // isTurboModule
+            ));
+            return moduleInfos;
+        };
     }
 
 }

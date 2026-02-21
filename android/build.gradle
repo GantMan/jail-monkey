@@ -1,6 +1,9 @@
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
+def isNewArchitectureEnabled() {
+   return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
+}
 
 def supportsNamespace() {
   def parsed = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')
@@ -16,6 +19,10 @@ def supportsNamespace() {
 }
 
 apply plugin: 'com.android.library'
+
+if (isNewArchitectureEnabled()) {
+    apply plugin: 'com.facebook.react'
+}
 
 android {
     if (supportsNamespace()) {
@@ -34,6 +41,20 @@ android {
         targetSdkVersion safeExtGet('targetSdkVersion', 31)
         versionCode 1
         versionName "1.0"
+        buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString())
+    }
+
+    sourceSets {
+       main {
+           if (isNewArchitectureEnabled()) {
+               java.srcDirs += [
+                    'src/newarch/java',
+                    "${project.buildDir}/generated/source/codegen/java"
+                ]
+           } else {
+               java.srcDirs += ['src/oldarch/java']
+           }
+       }
     }
     lintOptions {
        warning 'InvalidPackage'
@@ -43,4 +64,12 @@ android {
 dependencies {
     implementation 'com.facebook.react:react-native:+'
     implementation 'com.scottyab:rootbeer-lib:0.1.1'
+}
+
+if (isNewArchitectureEnabled()) {
+    react {
+        jsRootDir = file("../specs/")
+        libraryName = "JailMonkey"
+        codegenJavaPackageName = "com.gantix.JailMonkey"
+    }
 }
