@@ -296,6 +296,25 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
     resolve(isDebuggedModeActived ? @YES : @NO);
 }
 
+
+- (BOOL)isDeveloperMode {
+    int value = 0;
+    size_t size = sizeof(value);
+
+    if (sysctlbyname("security.mac.amfi.developer_mode_status", &value, &size, NULL, 0) == 0) {
+        return (value == 1);
+    }
+
+    return NO; // fallback if reading fails
+}
+
+RCT_EXPORT_METHOD(isDevelopmentSettingsMode:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    BOOL isEnabled = [self isDeveloperMode];
+    resolve(@(isEnabled));
+}
+
 - (BOOL)isJailBroken{
     #if TARGET_OS_SIMULATOR
       return NO;
