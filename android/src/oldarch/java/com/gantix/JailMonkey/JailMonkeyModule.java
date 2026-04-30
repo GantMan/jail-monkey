@@ -12,11 +12,9 @@ import javax.annotation.Nullable;
 
 public class JailMonkeyModule extends ReactContextBaseJavaModule {
 
-    private final JailMonkeyModuleImpl impl;
-
     public JailMonkeyModule(ReactApplicationContext reactContext) {
         super(reactContext);
-        impl = new JailMonkeyModuleImpl(reactContext);
+        JailMonkeyModuleImpl.init(reactContext);
     }
 
     @Override
@@ -26,25 +24,24 @@ public class JailMonkeyModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void isDevelopmentSettingsMode(Promise p) {
-        impl.isDevelopmentSettingsMode(p);
+        JailMonkeyModuleImpl.isDevelopmentSettingsMode(p);
     }
 
     @ReactMethod
     public void isDebuggedMode(Promise p) {
-        impl.isDebuggedMode(p);
+        JailMonkeyModuleImpl.isDebuggedMode(p);
     }
 
-    @ReactMethod
     @Override
     public @Nullable Map<String, Object> getConstants() {
         Map<String, Object> constants = new HashMap<>();
 
-        constants.put("isJailBroken", impl.isJailBroken());
-        constants.put("hookDetected", impl.hookDetected());
-        constants.put("canMockLocation", impl.canMockLocation());
-        constants.put("isOnExternalStorage", impl.isOnExternalStorage());
-        constants.put("AdbEnabled", impl.isAdbEnabled());
-        constants.put("rootedDetectionMethods", rootedCheck.getResultByDetectionMethod());
+        constants.put("isJailBroken", JailMonkeyModuleImpl.isJailBroken());
+        constants.put("hookDetected", JailMonkeyModuleImpl.hookDetected());
+        constants.put("canMockLocation", JailMonkeyModuleImpl.canMockLocation());
+        constants.put("isOnExternalStorage", JailMonkeyModuleImpl.isOnExternalStorage());
+        constants.put("AdbEnabled", JailMonkeyModuleImpl.isAdbEnabled());
+        constants.put("rootedDetectionMethods", JailMonkeyModuleImpl.rootedDetectionMethods());
 
         return constants;
     }

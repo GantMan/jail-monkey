@@ -93,6 +93,7 @@ public class JailMonkeyModuleImpl {
         return com.gantix.JailMonkey.HookDetection.HookDetectionCheck.hookDetected(context);
     }
 
+    @SuppressWarnings("unchecked")
     public static WritableMap rootedDetectionMethods() {
         RootedCheck rootedCheck = new RootedCheck(context);
         Map<String, Object> result = rootedCheck.getResultByDetectionMethod();
@@ -100,7 +101,18 @@ public class JailMonkeyModuleImpl {
         WritableMap map = Arguments.createMap();
 
         for (Map.Entry<String, Object> entry : result.entrySet()) {
-            map.putBoolean(entry.getKey(), (Boolean) entry.getValue());
+            Object value = entry.getValue();
+            if (value instanceof Boolean) {
+                map.putBoolean(entry.getKey(), (Boolean) value);
+            } else if (value instanceof Map) {
+                WritableMap nestedMap = Arguments.createMap();
+                for (Map.Entry<String, Object> nested : ((Map<String, Object>) value).entrySet()) {
+                    if (nested.getValue() instanceof Boolean) {
+                        nestedMap.putBoolean(nested.getKey(), (Boolean) nested.getValue());
+                    }
+                }
+                map.putMap(entry.getKey(), nestedMap);
+            }
         }
 
         return map;

@@ -4,7 +4,8 @@
 declare const _default: {
   jailBrokenMessage : () => string,
   isJailBroken: () => boolean;
-  androidRootedDetectionMethods?: {
+  rootedDetectionMethods?: () => {
+    jailMonkey: boolean;
     rootBeer: {
       detectRootManagementApps: boolean;
       detectPotentiallyDangerousApps: boolean;
@@ -15,8 +16,7 @@ declare const _default: {
       checkSuExists: boolean;
       checkForRootNative: boolean;
       checkForMagiskBinary: boolean;
-    },
-    jailMonkey: boolean;
+    };
   };
   hookDetected: () => boolean;
   isDebuggedMode: () => Promise<boolean>;
