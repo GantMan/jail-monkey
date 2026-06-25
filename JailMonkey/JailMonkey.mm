@@ -376,7 +376,6 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
     for (NSString *scheme in [self schemesToCheck]) {
         if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:scheme]]){
             schemeMessage = [NSString stringWithFormat:@"%@,%@", schemeMessage, scheme];
-            break;
         }
     }
     return schemeMessage;
@@ -388,7 +387,6 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
     for (NSString *path in [self pathsToCheck]) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:path]){
             existsPath = [NSString stringWithFormat:@"%@,%@", existsPath, path];
-            break;
         }
     }
     return existsPath;
@@ -409,18 +407,19 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
 
 - (NSString *)checkDylibsMessage
 {
-    NSString *imagePath = @"";
+    NSString *dylibMessage = @"";
+    NSString *imagePath;
 
     for (int i=0; i < _dyld_image_count(); i++) {
         imagePath = [NSString stringWithUTF8String:_dyld_get_image_name(i)];
 
         for (NSString *dylibPath in [self dylibsToCheck]) {
             if([imagePath localizedCaseInsensitiveContainsString:dylibPath]) {
-                imagePath = [NSString stringWithFormat:@"%@,%@", imagePath, dylibPath];
+                dylibMessage = [NSString stringWithFormat:@"%@,%@", dylibMessage, dylibPath];
             }
         }
     }
-    return imagePath;
+    return dylibMessage;
 }
 
 - (NSDictionary *)constantsToExport
