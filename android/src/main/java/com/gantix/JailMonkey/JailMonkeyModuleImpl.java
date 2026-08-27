@@ -80,7 +80,7 @@ public class JailMonkeyModuleImpl {
     }
 
     public static String jailBrokenMessage() {
-        return "null";
+        return "";
     }
 
     public static boolean canMockLocation() {

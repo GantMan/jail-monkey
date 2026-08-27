@@ -52,7 +52,10 @@ const exported: any =
             : () => String(source.jailBrokenMessage ?? ''),
         isJailBroken: wrapBool(source.isJailBroken),
         canMockLocation: wrapBool(source.canMockLocation),
-        trustFall: wrapBool(source.trustFall ?? false),
+        trustFall:
+          source.trustFall != null
+            ? wrapBool(source.trustFall)
+            : () => exported.isJailBroken() || exported.canMockLocation(),
         hookDetected: wrapBool(source.hookDetected ?? false),
         isOnExternalStorage: wrapBool(source.isOnExternalStorage ?? false),
         AdbEnabled: wrapBool(source.AdbEnabled ?? false),
