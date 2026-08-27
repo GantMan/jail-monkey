@@ -370,6 +370,32 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
    return errorMessage;
 }
 
+- (BOOL)trustFall
+{
+    return [self isJailBroken] || [self canMockLocation];
+}
+
+- (BOOL)hookDetected
+{
+    return NO;
+}
+
+- (BOOL)isOnExternalStorage
+{
+    return NO;
+}
+
+- (BOOL)AdbEnabled
+{
+    return NO;
+}
+
+RCT_EXPORT_METHOD(isDevelopmentSettingsMode:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)__unused reject)
+{
+    resolve(@NO);
+}
+
 - (NSString *)checkSchemesMessage
 {
     NSString *schemeMessage = @"";
