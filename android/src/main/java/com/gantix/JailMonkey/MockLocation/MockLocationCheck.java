@@ -20,7 +20,7 @@ import java.lang.IllegalArgumentException;
 public class MockLocationCheck {
     public static boolean isMockLocationOn(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return "0".equals(Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION));
+            return "1".equals(Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION));
         } else {
             List<String> ignorePackages = Arrays.asList(
                 context.getPackageName(),
@@ -29,10 +29,13 @@ public class MockLocationCheck {
             );
             PackageManager pm = context.getPackageManager();
             List<ApplicationInfo> packages =
-                    pm.getInstalledApplications(PackageManager.GET_META_DATA);
+                    pm.getInstalledApplications(0);
 
             if (packages != null) {
                 for (ApplicationInfo applicationInfo : packages) {
+                    if (ignorePackages.contains(applicationInfo.packageName)) {
+                        continue;
+                    }
                     try {
                         PackageInfo packageInfo = pm.getPackageInfo(applicationInfo.packageName,
                                 PackageManager.GET_PERMISSIONS);
@@ -43,8 +46,7 @@ public class MockLocationCheck {
                         if (requestedPermissions != null) {
                             for (int i = 0; i < requestedPermissions.length; i++) {
                                 if (requestedPermissions[i]
-                                        .equals("android.permission.ACCESS_MOCK_LOCATION")
-                                        && !ignorePackages.contains(applicationInfo.packageName)) {
+                                        .equals("android.permission.ACCESS_MOCK_LOCATION")) {
                                     int flag = packageInfo.requestedPermissionsFlags[i];
                                     boolean granted = (flag & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0;
                                     if (granted) {

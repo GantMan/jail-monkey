@@ -7,19 +7,13 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class HookDetectionCheck {
-
-    /**
-     * Detects if there is any suspicious installed application.
-     *
-     * @return <code>true</code> if some bad application is installed, <code>false</code> otherwise.
-     */
-    public static boolean hookDetected(Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        List<ApplicationInfo> applicationInfoList = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
-        String[] dangerousPackages = {
+    private static final Set<String> DANGEROUS_PACKAGES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
                 "de.robv.android.xposed.installer",
                 "com.saurik.substrate",
                 "de.robv.android.xposed",
@@ -45,11 +39,20 @@ public class HookDetectionCheck {
                 "eu.chainfire.supersu.pro",
                 "com.kingouser.com",
                 "com.topjohnwu.magisk"
-            };
+            )));
+
+    /**
+     * Detects if there is any suspicious installed application.
+     *
+     * @return <code>true</code> if some bad application is installed, <code>false</code> otherwise.
+     */
+    public static boolean hookDetected(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        List<ApplicationInfo> applicationInfoList = packageManager.getInstalledApplications(0);
 
         if (applicationInfoList != null) {
             for (ApplicationInfo applicationInfo : applicationInfoList) {
-                if (Arrays.asList(dangerousPackages).contains(applicationInfo.packageName)) {
+                if (DANGEROUS_PACKAGES.contains(applicationInfo.packageName)) {
                     return true;
                 }
             }
