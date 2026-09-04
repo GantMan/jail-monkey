@@ -30,9 +30,7 @@ jobs:
           java-version: '17'
 
       - name: Yarn Install
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install-example
+        run: yarn install-example
 
       - name: Cache Gradle Wrapper
         uses: actions/cache@v4
