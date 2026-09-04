@@ -20,7 +20,8 @@ import java.lang.IllegalArgumentException;
 public class MockLocationCheck {
     public static boolean isMockLocationOn(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return "0".equals(Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION));
+            return isLegacyMockLocationEnabled(
+                    Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION));
         } else {
             List<String> ignorePackages = Arrays.asList(
                 context.getPackageName(),
@@ -61,5 +62,9 @@ public class MockLocationCheck {
 
             return false;
         }
+    }
+
+    static boolean isLegacyMockLocationEnabled(String setting) {
+        return "1".equals(setting);
     }
 }
