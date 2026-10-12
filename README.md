@@ -33,6 +33,17 @@ Method | Returns | Description
 `canMockLocation` | `boolean` | Can this device fake its GPS location.
 `trustFall` | `boolean` | Checks if the device violates either `isJailBroken` or `canMockLocation`.
 `isDebuggedMode` | `Promise<boolean>` | Is the application is running in debug mode. Note that this method returns a Promise.
+`isJailBrokenAsync` | `Promise<boolean>` | Same as `isJailBroken`, but runs on a background thread.
+`canMockLocationAsync` | `Promise<boolean>` | Same as `canMockLocation`, but runs on a background thread.
+`trustFallAsync` | `Promise<boolean>` | Same as `trustFall`, but runs on a background thread.
+
+The synchronous `isJailBroken`, `canMockLocation` and `trustFall` block the JS thread while the checks run. Prefer the `Async` variants, which do the same work on a native background thread:
+
+```javascript
+if (await JailMonkey.isJailBrokenAsync()) {
+  // Alternative behaviour for jail-broken/rooted devices.
+}
+```
 
 ## iOS Only APIs
 

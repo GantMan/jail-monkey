@@ -4,6 +4,7 @@
 declare const _default: {
   jailBrokenMessage : () => string,
   isJailBroken: () => boolean;
+  isJailBrokenAsync: () => Promise<boolean>;
   androidRootedDetectionMethods?: {
     rootBeer: {
       detectRootManagementApps: boolean;
@@ -21,7 +22,9 @@ declare const _default: {
   hookDetected: () => boolean;
   isDebuggedMode: () => Promise<boolean>;
   canMockLocation: () => boolean;
+  canMockLocationAsync: () => Promise<boolean>;
   trustFall: () => boolean;
+  trustFallAsync: () => Promise<boolean>;
   isOnExternalStorage: () => boolean;
   AdbEnabled: () => boolean;
   isDevelopmentSettingsMode: () => Promise<boolean>;

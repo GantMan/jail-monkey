@@ -8,6 +8,9 @@ import android.provider.Settings;
 import androidx.annotation.Nullable;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableMap;
@@ -32,8 +35,22 @@ public class JailMonkeyModuleImpl {
     
     private static ReactApplicationContext context;
 
+    // The checks below hit the file system, the package manager and RootBeer's
+    // native code, so they are run here rather than on the JS or UI thread.
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
+
     public static void init(ReactApplicationContext ctx) {
         context = ctx;
+    }
+
+    private static void resolveAsync(final Promise p, final Callable<Boolean> check) {
+        executor.execute(() -> {
+            try {
+                p.resolve(check.call());
+            } catch (Exception e) {
+                p.reject("E_JAIL_MONKEY", e);
+            }
+        });
     }
 
     public static void isDevelopmentSettingsMode(Promise p) {
@@ -55,14 +72,19 @@ public class JailMonkeyModuleImpl {
     }
 
     public static void isDebuggedMode(Promise p) {
-        boolean isDebuggedMode;
+        resolveAsync(p, JailMonkeyModuleImpl::isDebuggedMode);
+    }
+
+    public static boolean isDebuggedMode() {
         if (Debug.isDebuggerConnected()) {
-            isDebuggedMode = true;
-        } else {
-            isDebuggedMode = (context.getApplicationContext().getApplicationInfo().flags
-                    & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+            return true;
         }
-        p.resolve(isDebuggedMode);
+        return (context.getApplicationContext().getApplicationInfo().flags
+                & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+    }
+
+    public static void trustFall(Promise p) {
+        resolveAsync(p, JailMonkeyModuleImpl::trustFall);
     }
 
     public static boolean trustFall() {
@@ -81,6 +103,10 @@ public class JailMonkeyModuleImpl {
 
     public static String jailBrokenMessage() {
         return "null";
+    }
+
+    public static void canMockLocation(Promise p) {
+        resolveAsync(p, JailMonkeyModuleImpl::canMockLocation);
     }
 
     public static boolean canMockLocation() {
@@ -104,6 +130,10 @@ public class JailMonkeyModuleImpl {
         }
 
         return map;
+    }
+
+    public static void isJailBroken(Promise p) {
+        resolveAsync(p, JailMonkeyModuleImpl::isJailBroken);
     }
 
     public static boolean isJailBroken() {

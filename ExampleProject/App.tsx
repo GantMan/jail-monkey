@@ -8,6 +8,9 @@ export default function App() {
     boolean | undefined
   >();
   const [isDebuggedMode, setIsDebuggedMode] = useState<boolean | undefined>();
+  const [isJailBroken, setIsJailBroken] = useState<boolean | undefined>();
+  const [canMockLocation, setCanMockLocation] = useState<boolean | undefined>();
+  const [trustFall, setTrustFall] = useState<boolean | undefined>();
 
   useEffect(() => {
     JailMonkey.isDevelopmentSettingsMode()
@@ -19,6 +22,14 @@ export default function App() {
     JailMonkey.isDebuggedMode().then(setIsDebuggedMode).catch(console.warn);
   }, []);
 
+  useEffect(() => {
+    JailMonkey.isJailBrokenAsync().then(setIsJailBroken).catch(console.warn);
+    JailMonkey.canMockLocationAsync()
+      .then(setCanMockLocation)
+      .catch(console.warn);
+    JailMonkey.trustFallAsync().then(setTrustFall).catch(console.warn);
+  }, []);
+
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.content} accessible={false} accessibilityLabel="">
@@ -26,6 +37,9 @@ export default function App() {
         <Row label="isJailBroken" value={JailMonkey.isJailBroken()} />
         <Row label="canMockLocation" value={JailMonkey.canMockLocation()} />
         <Row label="trustFall" value={JailMonkey.trustFall()} />
+        <Row label="isJailBrokenAsync" value={isJailBroken} />
+        <Row label="canMockLocationAsync" value={canMockLocation} />
+        <Row label="trustFallAsync" value={trustFall} />
         <Row label="isDebuggedMode" value={isDebuggedMode} />
 
         <Text style={styles.title}>Android</Text>
