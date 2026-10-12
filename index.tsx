@@ -26,6 +26,9 @@ const source: any = turboModule ?? legacy;
 const wrapBool = (v: any) =>
   typeof v === 'function' ? v : () => Boolean(v);
 
+const wrapAsyncBool = (v: any) =>
+  typeof v === 'function' ? v : async () => Boolean(v);
+
 // If neither the TurboModule nor the legacy NativeModule resolved, the package
 // is not linked. Return a Proxy so any method call throws an explicit linking
 // error instead of silently returning `false`/`''` (which would make a missing
@@ -53,6 +56,18 @@ const exported: any =
         isJailBroken: wrapBool(source.isJailBroken),
         canMockLocation: wrapBool(source.canMockLocation),
         trustFall: wrapBool(source.trustFall ?? false),
+        // Async variants run their checks on a native background thread, so
+        // they never block the JS or UI thread. Fall back to the sync value
+        // when the native side doesn't provide them (legacy module).
+        isJailBrokenAsync: wrapAsyncBool(
+          source.isJailBrokenAsync ?? source.isJailBroken,
+        ),
+        canMockLocationAsync: wrapAsyncBool(
+          source.canMockLocationAsync ?? source.canMockLocation,
+        ),
+        trustFallAsync: wrapAsyncBool(
+          source.trustFallAsync ?? source.trustFall ?? false,
+        ),
         hookDetected: wrapBool(source.hookDetected ?? false),
         isOnExternalStorage: wrapBool(source.isOnExternalStorage ?? false),
         AdbEnabled: wrapBool(source.AdbEnabled ?? false),

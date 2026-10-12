@@ -9,6 +9,9 @@ export interface Spec extends TurboModule {
   trustFall(): boolean;
   isOnExternalStorage(): boolean;
   AdbEnabled(): boolean;
+  isJailBrokenAsync(): Promise<boolean>;
+  canMockLocationAsync(): Promise<boolean>;
+  trustFallAsync(): Promise<boolean>;
   isDebuggedMode(): Promise<boolean>;
   isDevelopmentSettingsMode(): Promise<boolean>;
   rootedDetectionMethods?: () => { [key: string]: boolean };

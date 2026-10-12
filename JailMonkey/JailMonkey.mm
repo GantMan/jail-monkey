@@ -17,11 +17,22 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <sys/sysctl.h>
+#import <React/RCTUtils.h>
 
 static NSString * const JMJailbreakTextFile = @"/private/jailbreak.txt";
-static NSString * const JMisJailBronkenKey = @"isJailBroken";
-static NSString * const JMCanMockLocationKey = @"canMockLocation";
-static NSString * const JMJailBrokenMessageKey = @"jailBrokenMessage";
+
+// The checks hit the file system, fork() and CoreLocation, so the exported
+// async methods run them here rather than on the JS or main thread.
+static dispatch_queue_t JMCheckQueue(void)
+{
+    static dispatch_queue_t queue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = dispatch_queue_create("com.gantix.JailMonkey.checks",
+                                      dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_USER_INITIATED, 0));
+    });
+    return queue;
+}
 
 @implementation JailMonkey
 
@@ -29,7 +40,7 @@ RCT_EXPORT_MODULE();
 
 + (BOOL)requiresMainQueueSetup
 {
-    return YES;
+    return NO;
 }
 
 - (NSArray *)pathsToCheck
@@ -199,14 +210,17 @@ RCT_EXPORT_MODULE();
 
 - (BOOL)checkSchemes
 {
-    BOOL canOpenScheme = NO;
+    __block BOOL canOpenScheme = NO;
 
-    for (NSString *scheme in [self schemesToCheck]) {
-        if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:scheme]]){
-            canOpenScheme = YES;
-            break;
+    // UIApplication may only be used from the main thread.
+    RCTUnsafeExecuteOnMainQueueSync(^{
+        for (NSString *scheme in [self schemesToCheck]) {
+            if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:scheme]]){
+                canOpenScheme = YES;
+                break;
+            }
         }
-    }
+    });
 
     return canOpenScheme;
 }
@@ -291,13 +305,47 @@ RCT_EXPORT_MODULE();
     return false;
 }
 
-RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
-    rejecter:(RCTPromiseRejectBlock) __unused reject) {
-    BOOL isDebuggedModeActived = [self isDebugged];
-    resolve(isDebuggedModeActived ? @YES : @NO);
+- (void)resolve:(RCTPromiseResolveBlock)resolve withCheck:(BOOL (^)(void))check
+{
+    dispatch_async(JMCheckQueue(), ^{
+        resolve(check() ? @YES : @NO);
+    });
 }
 
-- (BOOL)isJailBroken{
+RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
+    reject:(RCTPromiseRejectBlock) __unused reject) {
+    [self resolve:resolve withCheck:^{ return [self isDebugged]; }];
+}
+
+RCT_EXPORT_METHOD(isJailBrokenAsync:(RCTPromiseResolveBlock) resolve
+    reject:(RCTPromiseRejectBlock) __unused reject) {
+    [self resolve:resolve withCheck:^{ return [self deviceIsJailBroken]; }];
+}
+
+RCT_EXPORT_METHOD(canMockLocationAsync:(RCTPromiseResolveBlock) resolve
+    reject:(RCTPromiseRejectBlock) __unused reject) {
+    [self resolve:resolve withCheck:^{ return [self deviceCanMockLocation]; }];
+}
+
+RCT_EXPORT_METHOD(trustFallAsync:(RCTPromiseResolveBlock) resolve
+    reject:(RCTPromiseRejectBlock) __unused reject) {
+    // deviceCanMockLocation already falls back to deviceIsJailBroken.
+    [self resolve:resolve withCheck:^{ return [self deviceCanMockLocation]; }];
+}
+
+RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, isJailBroken) {
+    return @([self deviceIsJailBroken]);
+}
+
+RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, canMockLocation) {
+    return @([self deviceCanMockLocation]);
+}
+
+RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, trustFall) {
+    return @([self deviceCanMockLocation]);
+}
+
+- (BOOL)deviceIsJailBroken{
     #if TARGET_OS_SIMULATOR
       return NO;
     #endif
@@ -316,10 +364,11 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
     if (isiOSAppOnMac) {
         return false;
     }
-    return [self checkPaths] || [self checkSchemes] || [self canViolateSandbox] || [self canFork] || [self checkSymlinks] || [self checkDylibs];
+    // checkSchemes has to hop to the main thread, so it goes last.
+    return [self checkPaths] || [self canViolateSandbox] || [self canFork] || [self checkSymlinks] || [self checkDylibs] || [self checkSchemes];
 }
 
-- (BOOL)canMockLocation{
+- (BOOL)deviceCanMockLocation{
     #if TARGET_OS_SIMULATOR
       return YES;
     #endif
@@ -336,13 +385,13 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
         }
     }
 
-    return [self isJailBroken];
+    return [self deviceIsJailBroken];
 }
 
--(NSString *)jailBrokenMessage{
+RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSString *, jailBrokenMessage){
     NSString *errorMessage = @"";
 
-    if([self isJailBroken])
+    if([self deviceIsJailBroken])
     {
         if ([self checkPaths]) {
         errorMessage = [NSString stringWithFormat:@"%@,#%@", errorMessage, @"checkPaths"];
@@ -372,13 +421,15 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
 
 - (NSString *)checkSchemesMessage
 {
-    NSString *schemeMessage = @"";
-    for (NSString *scheme in [self schemesToCheck]) {
-        if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:scheme]]){
-            schemeMessage = [NSString stringWithFormat:@"%@,%@", schemeMessage, scheme];
-            break;
+    __block NSString *schemeMessage = @"";
+    RCTUnsafeExecuteOnMainQueueSync(^{
+        for (NSString *scheme in [self schemesToCheck]) {
+            if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:scheme]]){
+                schemeMessage = [NSString stringWithFormat:@"%@,%@", schemeMessage, scheme];
+                break;
+            }
         }
-    }
+    });
     return schemeMessage;
 }
 
@@ -421,15 +472,6 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
         }
     }
     return imagePath;
-}
-
-- (NSDictionary *)constantsToExport
-{
-	return @{
-		JMisJailBronkenKey: @(self.isJailBroken),
-		JMCanMockLocationKey: @(self.canMockLocation),
-        JMJailBrokenMessageKey : [self jailBrokenMessage]
-	};
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED

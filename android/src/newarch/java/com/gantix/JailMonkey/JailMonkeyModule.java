@@ -27,6 +27,21 @@ public class JailMonkeyModule extends NativeJailMonkeySpec {
     }
 
     @Override
+    public void isJailBrokenAsync(Promise p) {
+        JailMonkeyModuleImpl.isJailBroken(p);
+    }
+
+    @Override
+    public void canMockLocationAsync(Promise p) {
+        JailMonkeyModuleImpl.canMockLocation(p);
+    }
+
+    @Override
+    public void trustFallAsync(Promise p) {
+        JailMonkeyModuleImpl.trustFall(p);
+    }
+
+    @Override
     public boolean AdbEnabled() {
         return JailMonkeyModuleImpl.isAdbEnabled();
     }
