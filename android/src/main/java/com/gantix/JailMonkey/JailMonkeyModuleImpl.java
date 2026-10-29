@@ -1,17 +1,13 @@
 package com.gantix.JailMonkey;
 
-import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Debug;
 import android.provider.Settings;
-import androidx.annotation.Nullable;
-import java.util.Map;
-import java.util.HashMap;
-import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Promise;
-import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.WritableMap;
 
 import com.gantix.JailMonkey.Rooted.RootedCheck;
 
@@ -19,7 +15,6 @@ import static com.gantix.JailMonkey.AdbEnabled.AdbEnabled.AdbEnabled;
 import static com.gantix.JailMonkey.ExternalStorage.ExternalStorageCheck.isOnExternalStorage;
 import static com.gantix.JailMonkey.HookDetection.HookDetectionCheck.hookDetected;
 import static com.gantix.JailMonkey.MockLocation.MockLocationCheck.isMockLocationOn;
-import com.facebook.react.bridge.ReactApplicationContext;
 
 /**
  * Logic class for JailMonkey module.
@@ -29,7 +24,6 @@ public class JailMonkeyModuleImpl {
 
     public static final String NAME = "JailMonkey";
 
-    
     private static ReactApplicationContext context;
 
     public static void init(ReactApplicationContext ctx) {
@@ -69,7 +63,7 @@ public class JailMonkeyModuleImpl {
         return isJailBroken() || canMockLocation();
     }
 
-     public static boolean isAdbEnabled() {
+    public static boolean isAdbEnabled() {
         if (context == null) return false;
         return AdbEnabled(context);
     }
@@ -94,16 +88,9 @@ public class JailMonkeyModuleImpl {
     }
 
     public static WritableMap rootedDetectionMethods() {
+        if (context == null) return Arguments.createMap();
         RootedCheck rootedCheck = new RootedCheck(context);
-        Map<String, Object> result = rootedCheck.getResultByDetectionMethod();
-
-        WritableMap map = Arguments.createMap();
-
-        for (Map.Entry<String, Object> entry : result.entrySet()) {
-            map.putBoolean(entry.getKey(), (Boolean) entry.getValue());
-        }
-
-        return map;
+        return Arguments.makeNativeMap(rootedCheck.getResultByDetectionMethod());
     }
 
     public static boolean isJailBroken() {
