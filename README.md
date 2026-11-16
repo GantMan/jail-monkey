@@ -33,6 +33,7 @@ Method | Returns | Description
 `canMockLocation` | `boolean` | Can this device fake its GPS location.
 `trustFall` | `boolean` | Checks if the device violates either `isJailBroken` or `canMockLocation`.
 `isDebuggedMode` | `Promise<boolean>` | Is the application is running in debug mode. Note that this method returns a Promise.
+`isDevelopmentSettingsMode` | `Promise<boolean>` | Is developer mode enabled on the device. On Android this is the *Developer options* setting (`DEVELOPMENT_SETTINGS_ENABLED`). On iOS (16+) this is *Developer Mode* (Privacy & Security → Developer Mode), detected via Apple's AMFI sysctl. Note that this method returns a Promise.
 
 ## iOS Only APIs
 
@@ -47,7 +48,6 @@ Method | Returns | Description
 `hookDetected` | `boolean` | Detects if there is any suspicious installed applications.
 `isOnExternalStorage` | `boolean` | Is the application running on external storage (ie. SD Card)
 `AdbEnabled` | `boolean` | Is Android Debug Bridge enabled.
-`isDevelopmentSettingsMode` | `Promise<boolean>` | Whether user has enabled development settings on their device. Note that this method returns a Promise.
 `androidRootedDetectionMethods` | `RootedDetectionMethods` | Returns an object with the results of all the Android rooted detection methods for more granular detection, this can be helpful if some devices are giving false positives.
 
 ```

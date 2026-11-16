@@ -297,6 +297,24 @@ RCT_EXPORT_METHOD(isDebuggedMode:(RCTPromiseResolveBlock) resolve
     resolve(isDebuggedModeActived ? @YES : @NO);
 }
 
+/**
+ * iOS Developer Mode (Privacy & Security → Developer Mode), introduced in iOS 16.
+ * DCDevice.developerModeEnabled is no longer in public DeviceCheck headers on
+ * current SDKs, so we read Apple's AMFI sysctl (same key used internally by
+ * Apple frameworks such as CloudAttestation).
+ */
+RCT_EXPORT_METHOD(isDevelopmentSettingsMode:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)__unused reject) {
+    int value = 0;
+    size_t size = sizeof(value);
+    // Same path on device and Simulator: if the AMFI key is absent or fails, return NO.
+    if (sysctlbyname("security.mac.amfi.developer_mode_status", &value, &size, NULL, 0) == 0) {
+        resolve(@(value == 1));
+    } else {
+        resolve(@NO);
+    }
+}
+
 - (BOOL)isJailBroken{
     #if TARGET_OS_SIMULATOR
       return NO;
