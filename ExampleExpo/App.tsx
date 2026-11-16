@@ -32,6 +32,10 @@ export default function App() {
         <Row label="canMockLocation" value={JailMonkey.canMockLocation()} />
         <Row label="trustFall" value={JailMonkey.trustFall()} />
         <Row label="isDebuggedMode" value={isDebuggedMode} />
+        <Row
+          label="isDevelopmentSettingsMode"
+          value={isDevelopmentSettingsMode}
+        />
 
         <Text style={styles.section}>Android</Text>
         <Text style={styles.note}>
@@ -43,10 +47,6 @@ export default function App() {
           value={JailMonkey.isOnExternalStorage()}
         />
         <Row label="AdbEnabled" value={JailMonkey.AdbEnabled()} />
-        <Row
-          label="isDevelopmentSettingsMode"
-          value={isDevelopmentSettingsMode}
-        />
       </View>
     </SafeAreaView>
   );
